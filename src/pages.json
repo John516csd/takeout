@@ -1,16 +1,58 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	}
+    "pages": [{
+            "path": "pages/home/home",
+            "style": {
+                "navigationBarTitleText": "主页"
+            }
+        },
+        {
+            "path": "pages/cart/cart",
+            "style": {
+                "navigationBarTitleText": "购物车"
+            }
+        },
+        {
+            "path": "pages/user/user",
+            "style": {
+                "navigationBarTitleText": "用户"
+            }
+        },
+        {
+            "path": "pages/login/login",
+            "style": {
+                "navigationBarTitleText": "登录"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "white",
+        "navigationBarTitleText": "uni-app",
+        "navigationBarBackgroundColor": "#66bb6a",
+        "backgroundColor": "#aaa"
+    },
+    "tabBar": {
+        "color": "#a9b7b7",
+        "selectedColor": "#66bb6a",
+        "borderStyle": "black",
+        "backgroundcolor": "#aaa",
+        "list": [{
+                "selectedIconPath": "./static/icons/商户.png",
+                "iconPath": "./static/icons/home_unchecked.png",
+                "pagePath": "pages/home/home",
+                "text": "首页"
+            },
+            {
+                "selectedIconPath": "./static/icons/购物车.png",
+                "iconPath": "./static/icons/cart_unchecked.png",
+                "pagePath": "pages/cart/cart",
+                "text": "购物车"
+            },
+            {
+                "selectedIconPath": "./static/icons/用户.png",
+                "iconPath": "./static/icons/user_unchecked.png",
+                "pagePath": "pages/user/user",
+                "text": "用户"
+            }
+        ]
+    }
 }
