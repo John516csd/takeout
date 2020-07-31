@@ -7,28 +7,29 @@ export default {
       //获取code
       success: function (res) {
         var code = res.code; //返回code
-        // console.log(code);
+        // console.log("code",code);
+        uni.setStorageSync("code", code);
         var appId = "wx732fcdde42fd6ea8";
         var secret = "b98c76bfbd0f72e40cb3aa7d32c7972f";
         uni.request({
-          url:
-            "https://api.weixin.qq.com/sns/jscode2session?appid=" +
-            appId +
-            "&secret=" +
-            secret +
-            "&js_code=" +
-            code +
-            "&grant_type=authorization_code",
-          data: {},
-          header: {
-            "content-type": "json",
+          url: "https://hzycode.cn/WechatTakeOut/key/openId",
+          data: {
+            code: uni.getStorageSync("code"),
           },
-          success: function (res) {
-            var openid = res.data.openid; //返回openid
-            console.log("openid为" + openid);
-            uni.setStorageSync("openid", openid);
+          success: (res) => {
+            console.log("appres", res.data.openid);
+            uni.setStorageSync("openid",res.data.openid); 
           },
         });
+        uni.request({
+          url:"https://hzycode.cn/WechatTakeOut/user/saveUser",
+          data:{
+            openId:uni.getStorageSync("openid"),
+          },
+          success:(res)=>{
+            console.log(res);
+          }
+        })
       },
     });
     //获取用户信息

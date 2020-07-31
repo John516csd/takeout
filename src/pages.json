@@ -22,8 +22,31 @@
             "style": {
                 "navigationBarTitleText": "登录"
             }
+        },
+        {
+            "path": "pages/myaddress/address",
+            "style": {
+                "navigationBarTitleText": "我的收货地址"
+            }
+        },
+        {
+            "path": "pages/addAddress/addAddress",
+            "style": {
+                "navigationBarTitleText": "编辑收货地址"
+            }
+        },
+        {
+            "path": "pages/newAddress/newAddress",
+            "style": {
+                "navigationBarTitleText": "增添收货地址"
+            }
         }
     ],
+    "permission": {
+        "scope.userLocation": {
+            "desc": "你的位置信息将用于小程序位置接口的效果展示"
+        }
+    },
     "globalStyle": {
         "navigationBarTextStyle": "white",
         "navigationBarTitleText": "uni-app",

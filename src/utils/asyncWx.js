@@ -48,3 +48,15 @@ export const getUserInfo = () => {
         })
     })
 }
+export const getLocation = () => {
+    return new Promise((resolve, reject) => {
+        wx.chooseLocation({
+            success: (res) => {
+                resolve(res);
+            },
+            fail: (err) => {
+                reject(err);
+            }
+        })
+    })
+}
