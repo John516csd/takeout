@@ -41,7 +41,7 @@ export default {
       .then((res)=>{
         console.log("delete",res);
         uni.setStorageSync("addressMessage",res.data);
-        uni.navigateTo({
+        uni.reLaunch({
           url:"/pages/myaddress/address"
         })
       })

@@ -1,9 +1,15 @@
 <template>
   <view class="container">
     <view class="address" v-for="(item1) in addressMessage" :key="item1">
-      <view class="address_message">{{item1.address}}--------------{{item1.tag==1?"默认":" "}}</view>
-      <view class="btn" @click="setdefault(item1.uuid)">设为默认</view>
-      <view class="edit" @click="editAddress(item1.uuid)">编辑</view>
+      <view class="address_message">
+        <text>
+          {{item1.address}}
+          {{item1.nick}} {{item1.gender=="男"?"先生":"女士"}}
+          --------------{{item1.tag==1?"默认":" "}}
+        </text>
+      </view>
+      <view class="btn icon iconfont icon-sheweimoren" @click="setdefault(item1.uuid)"></view>
+      <view class="edit icon iconfont icon-bianji" @click="editAddress(item1.uuid)"></view>
     </view>
     <navigator class="newAddress" url="/pages/newAddress/newAddress">添加新地址</navigator>
   </view>
@@ -15,17 +21,16 @@ export default {
       addressMessage: uni.getStorageSync("addressMessage"),
     };
   },
-  onLoad(){
+  onLoad() {
     //刷新addressMessage
     this.request({
-        url:"https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
-        data:{
-          openId:uni.getStorageSync("openid"),
-        }
-      })
-      .then((res)=>{
-        uni.setStorageSync("addressMessage",res.data);
-      })
+      url: "https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
+      data: {
+        openId: uni.getStorageSync("openid"),
+      },
+    }).then((res) => {
+      uni.setStorageSync("addressMessage", res.data);
+    });
   },
   methods: {
     //设为默认
@@ -46,13 +51,14 @@ export default {
     //编辑
     editAddress(uuid) {
       uni.navigateTo({
-        url: "/pages/addAddress/addAddress?uuid=" + uuid,
+        url: "/pages/newAddress/newAddress?uuid=" + uuid,
       });
     },
   },
 };
 </script>
 <style scoped>
+/* @import '../../style/icons.css'; */
 .container {
   display: flex;
   justify-content: space-around;
@@ -68,20 +74,31 @@ export default {
   border-radius: 20rpx;
   box-shadow: 20rpx 12rpx 10rpx 6rpx #3d3c3d4b;
   position: relative;
+  background: #eecda3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to left,
+    #ef629f,
+    #eecda3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #ef629f,
+    #eecda3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .address_message {
   width: 90%;
-  font-size: 30rpx;
+  font-size: 35rpx;
   word-wrap: break-word;
 }
 .btn {
   position: absolute;
-  margin-left: 400rpx;
-  margin-top: 100rpx;
+  right: 90rpx;
+  bottom: 0rpx;
 }
 .edit {
   position: absolute;
-  margin-left: 560rpx;
-  margin-top: 100rpx;
+  right: 0;
+  bottom: 0;
 }
 </style>

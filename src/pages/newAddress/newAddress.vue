@@ -1,44 +1,39 @@
 <template>
   <view class="container">
-    <view class="get_location" @click="handlegetlocation">选择位置</view>
-    <view class="got_location">{{address}}</view>
+    <button class="get_location" @click="handlegetLocation" type="primary">选择位置</button>
+    <view class="got_location">{{address==null?"":address}}</view>
     <page-head title="form"></page-head>
     <view class="uni-padding-wrap uni-common-mt">
       <form @submit="formSubmit" @reset="formReset">
         <view class="uni-form-item uni-column">
           <view class="title">收货人姓名</view>
-          <input class="uni-input" name="nickname" placeholder="请输入姓名" />
+          <input class="uni-input" name="nickname" placeholder="请输入姓名" v-model="nickname"/>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">性别</view>
           <radio-group name="gender">
             <label>
-              <radio value="男" />
+              <radio value="男" :checked="gender=='男'"/>
               <text>男</text>
             </label>
             <label>
-              <radio value="女" />
+              <radio value="女" :checked="gender=='女'"/>
               <text>女</text>
             </label>
           </radio-group>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">电话号码</view>
-          <input class="uni-input" name="phoneno" placeholder="请输入电话号码" />
+          <input class="uni-input" name="phoneno" placeholder="请输入电话号码" v-model="phoneno"/>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">详细地址</view>
-          <input class="uni-input" name="address_d" placeholder="详细地址，例1层101" maxlength="20"/>
+          <input class="uni-input" name="address_d" placeholder="详细地址，例1层101" maxlength="20" v-model="address_d"/>
         </view>
-        <!-- <view class="uni-form-item uni-column">
-					<view class="title">保留选项</view>
-					<view>
-						<switch name="switch" />
-					</view>
-        </view>-->
         <view class="uni-btn-v">
-          <button form-type="submit">Submit</button>
-          <button type="default" form-type="reset">Reset</button>
+          <button form-type="submit">保存地址</button>
+          <button type="default" form-type="reset" v-if="!uuid">重置信息</button>
+          <button type="default" form-type="delete" v-else @click="deleteAddress">删除地址</button>
         </view>
       </form>
     </view>
@@ -62,11 +57,34 @@ export default {
       cityName: "",
       countyName: "",
       village: "",
+      //编辑拿到的数据
+      uuid:"",
+      nickname:"",
+      gender:"",
+      phoneno:"",
+      address_d:"",
     };
+  },
+  onLoad(options) {
+    console.log("options", options);
+    this.uuid = options.uuid;
+    this.request({
+      url: "https://hzycode.cn/WechatTakeOut/address/getAddressByUuid",
+      data: {
+        uuid: this.uuid,
+      },
+    }).then((res) => {
+      console.log("addAddress",res.data);
+      this.address = res.data.province+res.data.city+res.data.district;
+      this.nickname = res.data.nick;
+      this.phoneno = res.data.phone;
+      this.gender = res.data.gender;
+      this.address_d = res.data.address;
+    });
   },
   methods: {
     //选择并获取定位
-    async handlegetlocation() {
+    async handlegetLocation() {
       //获取权限状态
       try {
         const res1 = await getSetting();
@@ -82,18 +100,6 @@ export default {
         console.log(error);
       }
     },
-
-    // getlocation() {
-    //   var that = this;
-    //   uni.chooseLocation({
-    //     success: function (res) {
-    //       console.log("详细位置为：" + res.address);
-    //       that.address = res.address;
-    //       that.formatAddress();
-    //     },
-    //   });
-    // },
-    //格式化地址信息
     formatAddress() {
       let regex =
         "(?<province>[^省]+省|.+自治区)(?<city>[^自治州]+自治州|[^市]+市|[^盟]+盟|[^地区]+地区|.+区划)(?<county>[^市]+市|[^县]+县|[^旗]+旗|.+区)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
@@ -121,6 +127,31 @@ export default {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
         uni.navigateTo({
+          url: "/pages/myaddress/address",
+        });
+      });
+    },
+    //更新地址
+    updateAddress(){
+      var that = this;
+      this.request({
+        url: "https://hzycode.cn/WechatTakeOut/address/updateAddress",
+        data: {
+          uuid:that.uuid,
+          openId: uni.getStorageSync("openid"),
+          nick: that.formMsg.nickname,
+          gender: that.formMsg.gender,
+          phone: that.formMsg.phoneno,
+          province: that.provinceName,
+          city: that.cityName,
+          district: that.countyName,
+          address: that.village + that.formMsg.address_d,
+        },
+        methods: "GET",
+      }).then((res) => {
+        console.log(res);
+        uni.setStorageSync("addressMessage", res.data);
+        uni.reLaunch({
           url: "/pages/myaddress/address",
         });
       });
@@ -168,7 +199,11 @@ export default {
         this.cityName = addressList[2];
         this.countyName = addressList[3];
         this.village = addressList[5];
-        this.sendAddress();
+        if(this.uuid){
+          this.updateAddress()
+        }else{
+          this.sendAddress();
+        }
       } else if (!this.address) {
         uni.showToast({ title: "请选择地址", icon: "none" });
       } else {
@@ -179,6 +214,22 @@ export default {
     formReset: function (e) {
       console.log("清空数据");
     },
+    deleteAddress(){
+      this.request({
+        url:"https://hzycode.cn/WechatTakeOut/address/deleteAddress",
+        data:{
+          uuid:this.uuid,
+          openId:uni.getStorageSync("openid"),
+        }
+      })
+      .then((res)=>{
+        console.log("delete",res);
+        uni.setStorageSync("addressMessage",res.data);
+        uni.reLaunch({
+          url:"/pages/myaddress/address"
+        })
+      })
+    }
   },
 };
 </script>

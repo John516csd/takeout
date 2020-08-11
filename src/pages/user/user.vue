@@ -20,9 +20,6 @@
         <image mode="aspectFill" class="item_image" src="../../static/icons/address.png"></image>
         <view class="item_text">我的地址</view>
       </view>
-      <view class="operationItem" @tap="sendAddress">
-        <view class="item_text">发送地址</view>
-      </view>
       <view class="operationItem">
         <view class="item_text">帮助/反馈</view>
       </view>
@@ -112,25 +109,6 @@ export default {
       })
     },
     //用户选择收货地址  end
-    sendAddress(){
-        this.request({
-            url:"https://hzycode.cn/WechatTakeOut/address/addAddress",
-            data:{
-                openId:uni.getStorageSync("openid"),
-                nick:this.address.userName,
-                gender:this.userinfo.gender,
-                phone:this.address.telNumber,
-                province:this.address.provinceName,
-                city:this.address.cityName,
-                district:this.address.countyName,                   
-                address:this.address.detailInfo,
-            },
-            methods:"GET"
-        })
-        .then((res)=>{
-            console.log(res);
-        })
-    }
   },
 };
 </script>

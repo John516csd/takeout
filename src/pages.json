@@ -40,6 +40,18 @@
             "style": {
                 "navigationBarTitleText": "增添收货地址"
             }
+        },
+        {
+            "path": "pages/search/search",
+            "style": {
+                "navigationBarTitleText": "搜索"
+            }
+        },
+        {
+            "path": "pages/storegoods/storegoods",
+            "style": {
+                "navigationBarTitleText": "店铺商品"
+            }
         }
     ],
     "permission": {
