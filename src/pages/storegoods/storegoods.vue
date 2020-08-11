@@ -52,7 +52,6 @@
       <view class="food">
         <view class="food-class" :style="'height:' + listHeight + 'px'">
           <scroll-view scroll-y scroll-with>
-
           </scroll-view>
         </view>
         <view class="food-detail"></view>
