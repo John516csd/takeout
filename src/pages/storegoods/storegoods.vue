@@ -58,6 +58,7 @@
       </view>
       <view class="cart"></view>
     </view>
+    <!-- <view class="title-group">123</view> -->
     <goods :list="goodsList" :families="familiesList"></goods>
   </view>
 </template>
@@ -126,12 +127,28 @@ export default {
     // this.picPath = option.pic;
     this.getMenuById();
     this.getFaimlies();
+    this.calculateHeight();
   },
   components: {
     goods,
     search,
   },
+  onReady(){
+  },
   methods: {
+    calculateHeight(){
+      console.log("ch被执行")
+      let heightArr = [];
+      let height = 0;
+      heightArr.push(height);
+      var query = uni.createSelectorQuery();
+      query.selectAll(".title-group").boundingClientRect();
+      query.exec(res=>{
+        for(let i = 0;i < res[0].length;i++){
+          console.log("ch",res[0][i]);
+        }
+      })
+    },
     getMenuById() {
       this.request({
         url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",

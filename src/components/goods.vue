@@ -2,7 +2,12 @@
   <view class="container">
     <view class="food">
       <view class="food-class">
-        <scroll-view scroll-y scroll-with-animation :scroll-into-view="viewToLeft">
+        <scroll-view
+          scroll-y
+          scroll-with-animation
+          :scroll-into-view="viewToLeft"
+          class="scroll-class"
+        >
           <view
             v-for="(item,index) in families"
             :key="index"
@@ -10,19 +15,26 @@
             @tap="selectFood(item.uuid,index)"
             :data-index="index"
             :data-titleId="item.uuid"
-            :id="item"
+            :id="'left'+index"
           >
             <view class="text" :data-index="index" :data-titleId="item.uuid">{{item.familyName}}</view>
           </view>
         </scroll-view>
       </view>
       <view class="food-detail">
-        <scroll-view scroll-y scroll-with-animation :scroll-into-view="viewTo">
-          <view class="title-group" v-for="(item,index) in list" :key="index">
-            <view class="title" :id="item.title">{{item.title}}</view>
+        <scroll-view
+          scroll-y
+          scroll-with-animation
+          :scroll-into-view="viewTo"
+          class="scroll-detail"
+          @scroll="scroll"
+          @scrolltolower="scrolltolower"
+        >
+          <view class="title-group" v-for="(item,index) in list" :key="index" :id="'right'+index">
+            <view class="title">{{item.title}}</view>
             <view class="food-info" v-for="(item2,index) in item.items" :key="index">
               <view class="img">
-                <image :src="picBase+item2.pic"></image>
+                <image lazy-load :src="(picBase+item2.pic)?(picBase+item2.pic):default_img"></image>
               </view>
               <view class="name">{{item2.title}}</view>
               <view class="note">{{item2.note}}</view>
@@ -47,14 +59,33 @@ export default {
     return {
       activeIndex: 0,
       viewToLeft: "",
-      viewTo: "",
-      picBase:getApp().globalData.serverUrl_p+'/',
+      viewTo: "right3",
+      picBase: getApp().globalData.serverUrl_p + "/",
+      heightArr: [],
+      default_img:"../../static/store.png",
     };
   },
-  mounted() {
+  mounted() {},
+  onReady() {
     this.getFoodsList();
   },
   methods: {
+    calculateHeight() {
+      const query = uni.createSelectorQuery().in(this);
+      query
+        .selectAll(".title-group")
+        .boundingClientRect()
+        .exec((res) => {
+          console.log("exec", res);
+          let nodes = res[0];
+          let rel = [];
+          nodes.map((item) => {
+            rel.push(item.top);
+          });
+          this.heightArr = rel;
+          console.log("heightArr", this.heightArr);
+        });
+    },
     getFoodsList() {
       this.request({
         url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",
@@ -63,17 +94,35 @@ export default {
         },
       }).then((res) => {
         console.log("getFoodsList", res);
+        this.calculateHeight();
       });
     },
     selectFood(uuid, index) {
       console.log("selectFood_uuid", uuid, "index", index);
       this.activeIndex = index;
+      this.viewTo = "right" + index;
+      console.log("viewTo", this.viewTo);
     },
+    scroll(e) {
+      let scrollTop = e.detail.scrollTop;
+      for (let i = 0; i < this.heightArr.length; i++) {
+        let h1 = this.heightArr[i] - 200;
+        let h2 = this.heightArr[i + 1] - 200;
+        if (scrollTop > h1 && scrollTop < h2) {
+          this.activeIndex = i;
+        }
+      }
+    },
+    scrolltolower(){
+      setTimeout(()=>{
+        this.activeIndex = this.list.length-1;
+      },100)
+    }
   },
 };
 </script>
 <style scoped>
-page{
+page {
   width: 100%;
 }
 .active {
@@ -81,19 +130,24 @@ page{
 }
 .food {
   display: flex;
-  height:100%;
+  height: calc(100vh - 240rpx - 78rpx);
 }
 .food-class {
   flex: 2;
   background-color: #eee;
 }
+.scroll-class {
+  height: calc(100vh - 240rpx - 78rpx);
+}
 .food-detail {
   flex-grow: 1;
-  flex: 5; 
+  flex: 5;
   padding: 0 14rpx;
   font-size: 26rpx;
 }
-
+.scroll-detail {
+  height: calc(100vh - 240rpx - 78rpx);
+}
 .food-detail .title {
   font-weight: 700;
   padding: 0 20rpx;
@@ -153,5 +207,4 @@ page{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 </style>

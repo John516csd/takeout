@@ -42,7 +42,6 @@ export default {
   methods: {
     toStoreGoods(id){
       console.log("id",id.detail)
-      // console.log("pic",id.pic)
       var pic = '/'+id.pic
       uni.setStorageSync("pic",getApp().globalData.serverUrl_p+pic);
       uni.navigateTo({
