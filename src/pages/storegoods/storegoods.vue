@@ -8,11 +8,11 @@
         </view>
         <view class="head-detail">
           <view class="info">
-            <text>起送￥2</text>
+            <text>起送￥{{shopInfo.startTakeOut}}</text>
             <text>30分钟</text>
             <text>3.2km</text>
           </view>
-          <view class="publicMsg">欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临欢迎光临</view>
+          <view class="publicMsg">{{shopInfo.announcement}}</view>
           <swiper class="actives" vertical autoplay circular>
             <swiper-item v-for="(item,index) in actives" :key="index" class="item" catchtouchmove="preventScrollSwiper">
               <view :class="'active-icon '+activesInfo[item.id].class">{{activesInfo[item.id].text}}</view>
@@ -59,7 +59,7 @@
       <view class="cart"></view>
     </view>
     <!-- <view class="title-group">123</view> -->
-    <goods :list="goodsList" :families="familiesList"></goods>
+    <goods :storeId="shopId"></goods>
   </view>
 </template>
 
@@ -69,7 +69,8 @@ import search from "../../components/search.vue";
 export default {
   data() {
     return {
-      shopId: "",
+      shopId: 0,
+      shopInfo:{},
       goodsList: [],
       familiesList: [],
       picPath: uni.getStorageSync("pic"),
@@ -125,9 +126,7 @@ export default {
     // console.log("pic",option.pic);
     this.shopId = option.id;
     // this.picPath = option.pic;
-    this.getMenuById();
-    this.getFaimlies();
-    this.calculateHeight();
+    this.getShopInfo();
   },
   components: {
     goods,
@@ -136,40 +135,17 @@ export default {
   onReady(){
   },
   methods: {
-    calculateHeight(){
-      console.log("ch被执行")
-      let heightArr = [];
-      let height = 0;
-      heightArr.push(height);
-      var query = uni.createSelectorQuery();
-      query.selectAll(".title-group").boundingClientRect();
-      query.exec(res=>{
-        for(let i = 0;i < res[0].length;i++){
-          console.log("ch",res[0][i]);
+    getShopInfo(){
+      this.request({
+        url:getApp().globalData.serverUrl+"/shop/getShop",
+        data:{
+          shopId:this.shopId,
         }
       })
-    },
-    getMenuById() {
-      this.request({
-        url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",
-        data: {
-          shopId: this.shopId,
-        },
-      }).then((res) => {
-        console.log("goods", res.data);
-        this.goodsList = res.data;
-      });
-    },
-    getFaimlies() {
-      this.request({
-        url: getApp().globalData.serverUrl + "/family/getFamilies",
-        data: {
-          shopId: this.shopId,
-        },
-      }).then((res) => {
-        console.log("families", res.data);
-        this.familiesList = res.data;
-      });
+      .then((res)=>{
+        this.shopInfo = res.data;
+        console.log("getShopInfo",this.shopInfo);
+      })
     },
     selectTabItem(e) {
       if (e.target.dataset.index) {

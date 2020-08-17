@@ -30,21 +30,77 @@
           @scroll="scroll"
           @scrolltolower="scrolltolower"
         >
-          <view class="title-group" v-for="(item,index) in list" :key="index" :id="'right'+index">
+          <view
+            class="title-group"
+            v-for="(item,groupIndex) in list"
+            :key="groupIndex"
+            :id="'right'+groupIndex"
+          >
             <view class="title">{{item.title}}</view>
             <view class="food-info" v-for="(item2,index) in item.items" :key="index">
               <view class="img">
                 <image lazy-load :src="(picBase+item2.pic)?(picBase+item2.pic):default_img"></image>
               </view>
-              <view class="name">{{item2.title}}</view>
-              <view class="note">{{item2.note}}</view>
-              <view class="month">
-                <text decode="true">月售{{item2.monthSell}}&nbsp;&nbsp;</text>
-                <text>赞{{item2.good}}</text>
+              <view class="info">
+                <view class="name">{{item2.title}}</view>
+                <view class="note">{{item2.note}}</view>
+                <view class="month">
+                  <text decode="true">月售{{item2.monthSell}}&nbsp;&nbsp;</text>
+                  <text>赞{{item2.good}}</text>
+                </view>
+                <view class="price-count">
+                  <view class="price">￥{{item2.money/100}}</view>
+                  <view class="count">
+                    <view
+                      class="add btn"
+                      @tap="add"
+                      :data-index="index"
+                      :data-item="item2"
+                      :data-groupIndex="groupIndex"
+                    >+</view>
+                    <view class="num">{{item2.count}}</view>
+                    <view
+                      class="reduce btn"
+                      @tap="reduce"
+                      v-if="item2.count>0?true:false"
+                      :data-index="index"
+                      :data-item="item2"
+                      :data-groupIndex="groupIndex"
+                    >-</view>
+                  </view>
+                </view>
               </view>
             </view>
           </view>
         </scroll-view>
+      </view>
+    </view>
+    <view class="cart">
+      <view class="cart-container">
+        <view :class="'cart-img '+'has-food'" @tap="listCart">
+          <image src="./static/gouwuche.png"></image>
+        </view>
+        <view class="del-price-money">
+          <view class="money">￥{{totalMoney/100}}</view>
+          <view class="del-price">{{shopInfo.startTakeOut>0?'另需配送费'+shopInfo.startTakeOut+'元':'免配送费'}}</view>
+        </view>
+        <view
+          :class="'start-del ' + ((totalMoney>=shopInfo.startTakeOut&&cart.length>0)?'has-food':'')"
+        >{{(totalMoney>=shopInfo.startTakeOut&&cart.length>0)?'去结算':shopInfo.startTakeOut+'元起送'}}</view>
+      </view>
+      <view class="cart-list" v-if="showCart">
+        <view class="cart-list-header">清空购物车</view>
+        <view class="cart-list-item">
+          <view class="item" v-for="(item,index) in cart" :key="index">
+            <view class="cart-detail">{{item.title}}</view>
+            <view class="cart-detail" style="color:red">￥{{item.money/100}}</view>
+            <view class="cart-detail cart-count">
+              <view class="reduce btn">-</view>
+              <view class="count">{{item.count}}</view>
+              <view class="add btn">+</view>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -52,24 +108,59 @@
 <script>
 export default {
   props: {
-    list: Array,
-    families: Array,
+    storeId: Number,
   },
   data() {
     return {
+      shopId: 1,
+      shopInfo: {},
+      list: [],
+      families: [],
       activeIndex: 0,
       viewToLeft: "",
-      viewTo: "right3",
+      viewTo: "right0",
       picBase: getApp().globalData.serverUrl_p + "/",
       heightArr: [],
-      default_img:"../../static/store.png",
+      default_img: "../../static/store.png",
+      count: 0,
+      showCart: false,
+      cart: [],
+      totalMoney: 0,
+      isOne:false,
     };
   },
   mounted() {},
   onReady() {
+    this.getShopInfo();
+    this.getFaimlies();
     this.getFoodsList();
+    setTimeout(() => {
+      this.calculateHeight();
+    }, 1000);
   },
   methods: {
+    getShopInfo() {
+      this.request({
+        url: getApp().globalData.serverUrl + "/shop/getShop",
+        data: {
+          shopId: this.shopId,
+        },
+      }).then((res) => {
+        this.shopInfo = res.data;
+        console.log("getShopInfo", this.shopInfo);
+      });
+    },
+    getFaimlies() {
+      this.request({
+        url: getApp().globalData.serverUrl + "/family/getFamilies",
+        data: {
+          shopId: this.storeId,
+        },
+      }).then((res) => {
+        console.log("families", res.data);
+        this.families = res.data;
+      });
+    },
     calculateHeight() {
       const query = uni.createSelectorQuery().in(this);
       query
@@ -90,11 +181,11 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",
         data: {
-          shopId: 1,
+          shopId: this.shopId,
         },
       }).then((res) => {
-        console.log("getFoodsList", res);
-        this.calculateHeight();
+        this.list = res.data;
+        console.log("list", this.list);
       });
     },
     selectFood(uuid, index) {
@@ -110,101 +201,88 @@ export default {
         let h2 = this.heightArr[i + 1] - 200;
         if (scrollTop > h1 && scrollTop < h2) {
           this.activeIndex = i;
+          this.viewToLeft = "left" + i;
         }
       }
     },
-    scrolltolower(){
-      setTimeout(()=>{
-        this.activeIndex = this.list.length-1;
-      },100)
-    }
+    scrolltolower() {
+      setTimeout(() => {
+        this.activeIndex = this.list.length - 1;
+      }, 100);
+    },
+    add(e) {
+      console.log(e);
+      this.isOne = true;
+      let groupIndex = e.target.dataset.groupindex;
+      let index = e.target.dataset.index;
+      let foodCount = this.list[groupIndex].items[index].count;
+      let foodId = this.list[groupIndex].items[index].uuid;
+      foodCount += 1;
+      this.list[groupIndex].items[index].count = foodCount;
+      console.log("list", this.list);
+      let cart = this.cart;
+      let isIncart = false;
+
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].uuid == foodId) {
+          isIncart = true;
+          break;
+        }
+      }
+
+      if (isIncart) {
+        cart[i].count++;
+      } else {
+        cart.push({ ...this.list[groupIndex].items[index], groupIndex });
+      }
+
+      let totalMoney = this.totalMoney;
+      totalMoney += this.list[groupIndex].items[index].money;
+      this.totalMoney = totalMoney;
+      this.cart = cart;
+      console.log("cart", this.cart);
+      console.log("totalMoney", this.totalMoney);
+    },
+    reduce(e) {
+      console.log(e);
+      let groupIndex = e.target.dataset.groupindex;
+      let index = e.target.dataset.index;
+      let foodCount = this.list[groupIndex].items[index].count;
+      let foodId = this.list[groupIndex].items[index].uuid;
+      foodCount -= 1;
+      this.list[groupIndex].items[index].count = foodCount;
+      console.log("list", this.list);
+
+      let cart = this.cart;
+      if(!(cart.length > 0)){
+        this.isOne = false;
+      }
+
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].uuid == foodId) {
+          if (cart[i].count == 1) {
+            cart.splice(i, 1);
+          } else {
+            cart[i].count--;
+          }
+          break;
+        }
+      }
+      let totalMoney = this.totalMoney;
+      totalMoney -= this.list[groupIndex].items[index].money;
+      this.totalMoney = totalMoney;
+      this.cart = cart;
+      console.log("cart", this.cart);
+      console.log("totalMoney", this.totalMoney);
+    },
+    listCart() {
+      if (this.cart.length > 0) {
+        this.showCart = !this.showCart;
+      }
+    },
   },
 };
 </script>
 <style scoped>
-page {
-  width: 100%;
-}
-.active {
-  background-color: #664663;
-}
-.food {
-  display: flex;
-  height: calc(100vh - 240rpx - 78rpx);
-}
-.food-class {
-  flex: 2;
-  background-color: #eee;
-}
-.scroll-class {
-  height: calc(100vh - 240rpx - 78rpx);
-}
-.food-detail {
-  flex-grow: 1;
-  flex: 5;
-  padding: 0 14rpx;
-  font-size: 26rpx;
-}
-.scroll-detail {
-  height: calc(100vh - 240rpx - 78rpx);
-}
-.food-detail .title {
-  font-weight: 700;
-  padding: 0 20rpx;
-  margin-bottom: 20rpx;
-  height: 50rpx;
-  line-height: 50rpx;
-  background-color: #eee;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.food-detail .title-group {
-  padding-bottom: 30rpx;
-}
-
-.food-detail .title-group:last-child {
-  margin-bottom: 120rpx;
-}
-
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  color: transparent;
-}
-
-.food-info {
-  margin-bottom: 30rpx;
-  display: flex;
-}
-
-.food-info:last-child {
-  margin-bottom: 0;
-}
-
-.food-info .img {
-  width: 120rpx;
-  text-align: center;
-}
-
-.food-info .img image {
-  width: 100rpx;
-  height: 100rpx;
-}
-
-.food-info .info {
-  flex-grow: 1;
-}
-
-.info .name {
-  font-size: 36rpx;
-  font-weight: 700;
-}
-
-.info .note {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
+@import "./style/goods.css";
 </style>

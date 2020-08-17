@@ -1,0 +1,259 @@
+page {
+    width: 100%;
+}
+
+.active {
+    background-color: #66bb6a;
+}
+
+.food {
+    display: flex;
+    height: calc(100vh - 240rpx - 78rpx);
+}
+
+.food-class {
+    flex: 2;
+    background-color: #eee;
+}
+
+.food-class .food-class-item {
+    position: relative;
+    height: 100rpx;
+    box-sizing: border-box;
+    padding: 10rpx 20rpx;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.food-class .food-class-item:last-child {
+    margin-bottom: 120rpx;
+}
+
+.food-class .food-class-item .text {
+    text-align: center;
+    max-height: 80rpx;
+    overflow: hidden;
+}
+
+.scroll-class {
+    height: calc(100vh - 240rpx - 78rpx);
+}
+
+.food-detail {
+    flex-grow: 1;
+    flex: 5;
+    padding: 0 14rpx;
+    font-size: 26rpx;
+}
+
+.scroll-detail {
+    height: calc(100vh - 240rpx - 78rpx);
+}
+
+.food-detail .title {
+    font-weight: 700;
+    padding: 0 20rpx;
+    margin-bottom: 20rpx;
+    height: 50rpx;
+    line-height: 50rpx;
+    background-color: #eee;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.food-detail .title-group {
+    padding-bottom: 30rpx;
+}
+
+.food-detail .title-group:last-child {
+    margin-bottom: 120rpx;
+}
+
+ ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+
+.food-info {
+    margin-bottom: 30rpx;
+    display: flex;
+}
+
+.food-info:last-child {
+    margin-bottom: 0;
+}
+
+.food-info .img {
+    width: 120rpx;
+    text-align: center;
+}
+
+.food-info .img image {
+    width: 100rpx;
+    height: 100rpx;
+}
+
+.food-info .info {
+    flex-grow: 1;
+}
+
+.info .name {
+    font-size: 36rpx;
+    font-weight: 700;
+}
+
+.info .note {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.price-count {
+    display: flex;
+    height: 50rpx;
+    line-height: 50rpx;
+}
+
+.price-count .price {
+    font-size: 36rpx;
+    flex-grow: 1;
+    color: red;
+}
+
+.price-count .count {
+    display: flex;
+    line-height: 60rpx;
+    flex-grow: 1;
+    flex-direction: row-reverse;
+}
+
+.price-count .count .num {
+    line-height: 50rpx;
+    font-size: 30rpx;
+}
+
+.btn {
+    width: 50rpx;
+    height: 50rpx;
+    border-radius: 50%;
+    font-size: 40rpx;
+    font-weight: 700;
+    color: black;
+    text-align: center;
+    line-height: 50rpx;
+    background-color: #ffd161;
+    margin: 0 16rpx;
+}
+
+.cart {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 110rpx;
+    line-height: 110rpx;
+    background-color: #333;
+}
+
+.cart .cart-container {
+    display: flex;
+    position: relative;
+    color: #eee;
+}
+
+.cart .del-price-money {
+    flex-grow: 1;
+    font-size: 28rpx;
+    padding-left: 140rpx;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart .del-price-money .money {
+    font-size: 36rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+}
+
+.cart .del-price-money .del-price {
+    font-size: 24rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+}
+
+.cart .start-del {
+    width: 200rpx;
+    font-weight: 700;
+    font-size: 30rpx;
+    text-align: center;
+    background-color: #2f2f2f;
+}
+
+.cart .cart-img {
+    position: absolute;
+    top: -24rpx;
+    left: 20rpx;
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    background-color: #666;
+    text-align: center;
+    z-index: 9;
+}
+
+.cart .cart-img image {
+    width: 60rpx;
+    height: 60rpx;
+    vertical-align: middle;
+    margin-bottom: 20rpx;
+}
+
+.cart .has-food {
+    color: #333;
+    background-color: #ffd161;
+}
+
+.cart .cart-list {
+    position: absolute;
+    bottom: 110rpx;
+    background-color: #fff;
+    width: 100%;
+}
+
+.cart .cart-list-header {
+    height: 60rpx;
+    line-height: 60rpx;
+    background-color: #eee;
+    text-align: right;
+    font-size: 28rpx;
+    padding: 0 30rpx;
+    color: #333;
+}
+
+.cart-list-item {
+    max-height: 500rpx;
+    overflow: scroll;
+}
+
+.cart-list-item .item {
+    display: flex;
+}
+
+.cart-list-item .item .cart-detail {
+    flex: 1;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-count {
+    display: flex;
+    align-items: center;
+}
