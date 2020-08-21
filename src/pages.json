@@ -52,6 +52,12 @@
             "style": {
                 "navigationBarTitleText": "店铺商品"
             }
+        },
+        {
+            "path": "pages/submit/submit",
+            "style": {
+                "navigationBarTitleText": "提交订单"
+            }
         }
     ],
     "permission": {
@@ -63,7 +69,17 @@
         "navigationBarTextStyle": "white",
         "navigationBarTitleText": "uni-app",
         "navigationBarBackgroundColor": "#66bb6a",
-        "backgroundColor": "#aaa"
+        "backgroundColor": "#aaa",
+        "usingComponents": {
+            "i-card": "/static/iview/card/index",
+            "i-panel": "/static/iview/panel/index",
+            "i-cell-group": "/static/iview/cell-group/index",
+            "i-cell": "/static/iview/cell/index",
+            "i-action-sheet": "/static/iview/action-sheet/index",
+            "i-icon": "/static/iview/icon/index",
+            "i-swipeout": "/static/iview/swipeout/index"
+
+        }
     },
     "tabBar": {
         "color": "#a9b7b7",

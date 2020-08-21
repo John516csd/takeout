@@ -76,28 +76,44 @@
       </view>
     </view>
     <view class="cart">
-      <view class="cart-container">
-        <view :class="'cart-img '+'has-food'" @tap="listCart">
-          <image src="./static/gouwuche.png"></image>
-        </view>
-        <view class="del-price-money">
-          <view class="money">￥{{totalMoney/100}}</view>
-          <view class="del-price">{{shopInfo.startTakeOut>0?'另需配送费'+shopInfo.startTakeOut+'元':'免配送费'}}</view>
-        </view>
+      <view class="cart-container" @tap="listCart">
+          <view :class="'cart-img '+'has-food'">
+            <image src="./static/gouwuche.png"></image>
+          </view>
+          <view class="del-price-money">
+            <view class="money">￥{{totalMoney/100}}</view>
+            <view
+              class="del-price"
+            >{{shopInfo.startTakeOut>0?'另需配送费'+shopInfo.startTakeOut+'元':'免配送费'}}</view>
+          </view>
         <view
           :class="'start-del ' + ((totalMoney>=shopInfo.startTakeOut&&cart.length>0)?'has-food':'')"
+          @tap="submitMenu"
         >{{(totalMoney>=shopInfo.startTakeOut&&cart.length>0)?'去结算':shopInfo.startTakeOut+'元起送'}}</view>
       </view>
       <view class="cart-list" v-if="showCart">
-        <view class="cart-list-header">清空购物车</view>
+        <view class="top" @tap="closeModal"></view>
+        <view class="cart-list-header" @tap="clearAll">清空购物车</view>
         <view class="cart-list-item">
           <view class="item" v-for="(item,index) in cart" :key="index">
             <view class="cart-detail">{{item.title}}</view>
             <view class="cart-detail" style="color:red">￥{{item.money/100}}</view>
             <view class="cart-detail cart-count">
-              <view class="reduce btn">-</view>
+              <view
+                class="reduce btn"
+                @tap="cartReduce"
+                :data-index="index"
+                :data-titleId="item.family"
+                :data-uuid="item.uuid"
+              >-</view>
               <view class="count">{{item.count}}</view>
-              <view class="add btn">+</view>
+              <view
+                class="add btn"
+                @tap="cartAdd"
+                :data-index="index"
+                :data-titleId="item.family"
+                :data-uuid="item.uuid"
+              >+</view>
             </view>
           </view>
         </view>
@@ -126,7 +142,7 @@ export default {
       showCart: false,
       cart: [],
       totalMoney: 0,
-      isOne:false,
+      submitShowcart:false,
     };
   },
   mounted() {},
@@ -143,7 +159,7 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/shop/getShop",
         data: {
-          shopId: this.shopId,
+          shopId: this.storeId,
         },
       }).then((res) => {
         this.shopInfo = res.data;
@@ -181,7 +197,7 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",
         data: {
-          shopId: this.shopId,
+          shopId: this.storeId,
         },
       }).then((res) => {
         this.list = res.data;
@@ -254,7 +270,7 @@ export default {
       console.log("list", this.list);
 
       let cart = this.cart;
-      if(!(cart.length > 0)){
+      if (!(cart.length > 0)) {
         this.isOne = false;
       }
 
@@ -276,10 +292,102 @@ export default {
       console.log("totalMoney", this.totalMoney);
     },
     listCart() {
-      if (this.cart.length > 0) {
+      console.log("listCart",this.showCart);
+      if (this.cart.length > 0 && this.submitShowcart == false) {
         this.showCart = !this.showCart;
       }
     },
+    clearAll() {
+      for (var i = 0; i < this.cart.length; i++) {
+        for (var j = 0; j < this.list.length; j++) {
+          if (this.cart[i].family == this.list[j].titleId) {
+            for (var k = 0; k < this.list[j].items.length; k++) {
+              if (this.list[j].items[k].uuid == this.cart[i].uuid) {
+                console.log("执行了");
+                this.list[j].items[k].count = 0;
+              }
+            }
+          }
+        }
+      }
+      this.cart = [];
+      this.showCart = false;
+      console.log("清除后的", this.list, this.cart);
+      this.totalMoney = 0;
+    },
+    cartAdd(e) {
+      console.log("cartAdd", e);
+      var index = e.target.dataset.index;
+      var titleId = e.target.dataset.titleid;
+      var uuid = e.target.dataset.uuid;
+      console.log(index, titleId, uuid);
+
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].titleId == titleId) {
+          for (var j = 0; j < this.list[i].items.length; j++) {
+            if (this.list[i].items[j].uuid == uuid) {
+              this.list[i].items[j].count += 1;
+              this.cart[index].count += 1;
+              this.totalMoney += this.cart[index].money;
+              console.log("cartAdd", this.list, this.cart);
+            }
+          }
+        }
+      }
+    },
+    cartReduce(e) {
+      var index = e.target.dataset.index;
+      var titleId = e.target.dataset.titleid;
+      var uuid = e.target.dataset.uuid;
+      console.log(index, titleId, uuid);
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].titleId == titleId) {
+          for (var j = 0; j < this.list[i].items.length; j++) {
+            if (this.list[i].items[j].uuid == uuid) {
+              this.list[i].items[j].count -= 1;
+              this.totalMoney -= this.cart[index].money;
+              if(this.list[i].items[j].count < 1){
+                this.cart.splice(index,1);
+              }else{
+                this.cart[index].count -= 1;
+              }
+              if(this.cart.length == 0){
+                this.showCart = false;
+              }
+              console.log("cartReduce", this.list, this.cart);
+            }
+          }
+        }
+      }
+    },
+    submitMenu(){
+      this.submitShowcart = true;
+      console.log("submit",this.showCart);
+      uni.setStorageSync("cart",this.cart);
+      var dataArr = [];
+      for(var i = 0;i < this.cart.length;i++){
+        var uuid = this.cart[i].uuid;
+        var number = this.cart[i].count;
+        dataArr.push({"uuid":uuid,"number":number})
+      }
+      var res = {
+        menuList:dataArr, 
+      }
+      this.request({
+        method:"POST",
+        url:getApp().globalData.serverUrl+'/toPay/prePay',
+        data:JSON.stringify(res),
+      })
+      .then((res)=>{
+        console.log("submitMenu",res);
+        if(res.data == this.totalMoney){
+          uni.navigateTo({
+            url:"/pages/submit/submit"
+          }),
+          this.submitShowcart = false;
+        }
+      })
+    }
   },
 };
 </script>

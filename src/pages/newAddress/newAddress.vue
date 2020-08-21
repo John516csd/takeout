@@ -57,6 +57,8 @@ export default {
       cityName: "",
       countyName: "",
       village: "",
+      latitude:"",
+      longitude:"",
       //编辑拿到的数据
       uuid:"",
       nickname:"",
@@ -95,6 +97,9 @@ export default {
         const res2 = await getLocation();
         console.log("详细位置为：" + res2.address);
         this.address = res2.address;
+        this.latitude = (res2.latitude+'').substring(0,9);
+        this.longitude = (res2.longitude+'').substring(0,9);
+        console.log("经纬度",this.latitude,this.longitude);
         this.formatAddress();
       } catch (error) {
         console.log(error);
@@ -121,12 +126,13 @@ export default {
           city: that.cityName,
           district: that.countyName,
           address: that.village + that.formMsg.address_d,
+          lngAndLat:that.latitude+','+that.longitude,
         },
         methods: "GET",
       }).then((res) => {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
-        uni.navigateTo({
+        uni.reLaunch({
           url: "/pages/myaddress/address",
         });
       });
@@ -146,6 +152,7 @@ export default {
           city: that.cityName,
           district: that.countyName,
           address: that.village + that.formMsg.address_d,
+          lngAndLat:that.latitude+','+that.longitude,
         },
         methods: "GET",
       }).then((res) => {
