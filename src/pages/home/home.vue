@@ -21,7 +21,7 @@
 <script>
 import search from "../../components/search.vue";
 import Swiper from "../../components/swiper.vue";
-import storeList from "../../components/store_list.vue"
+import storeList from "../../components/store_list.vue";
 
 export default {
   components: {
@@ -40,39 +40,60 @@ export default {
     this.getShop();
   },
   methods: {
-    toStoreGoods(id){
-      console.log("id",id.detail)
-      var pic = '/'+id.pic
-      uni.setStorageSync("pic",getApp().globalData.serverUrl_p+pic);
+    toStoreGoods(id) {
+      console.log("id", id.detail);
+      var pic = "/" + id.pic;
+      uni.setStorageSync("pic", getApp().globalData.serverUrl_p + pic);
       uni.navigateTo({
-        url:'/pages/storegoods/storegoods?id='+id.detail+'&pic='+id.pic
-      })
-    },
-    getShopList() {
-      this.request({
-        url: getApp().globalData.serverUrl + "/shop/getAllShop",
-      }).then((res) => {
-        this.shopList = res.data;
-        console.log("shopList", this.shopList);
+        url: "/pages/storegoods/storegoods?id=" + id.detail + "&pic=" + id.pic,
       });
     },
-    getShop(){
+    getShopList() {
+      var that = this;
+      uni.getLocation({
+        type: "wgs84",
+        success(res) {
+          console.log("当前经纬度：", res.latitude, res.longitude);
+          var address = res.longitude+','+res.latitude;
+          that.request({
+            url: getApp().globalData.serverUrl + "/shop/getAllShop",
+            data:{
+              origin:address,
+            }
+          }).then((res) => {
+            that.shopList = res.data;
+            that.setTimearr();
+            console.log("shopList", that.shopList);
+          });
+        },
+      });
+    },
+    setTimearr(){
+      console.log("setTimearr",this.shopList);
+      var timeArr = [];
+      for(var i = 0;i < this.shopList.length;i++){
+        timeArr.push({"key":this.shopList[i].id,"value":this.shopList[i].deliveryTime});
+        console.log("setTimearr的deliveryTime",this.shopList[i].deliveryTime);
+      }
+      console.log("timeArr",timeArr);
+      uni.setStorageSync("timeArr",timeArr);
+    },
+    getShop() {
       this.request({
-        url:getApp().globalData.serverUrl+"/shop/getShop",
-        data:{
-          shopId:1
-        }
-      })
-      .then((res)=>{
-        console.log("getShop",res)
-      })
-    }
+        url: getApp().globalData.serverUrl + "/shop/getShop",
+        data: {
+          shopId: 1,
+        },
+      }).then((res) => {
+        console.log("getShop", res);
+      });
+    },
   },
 };
 </script>
 
 <style>
-page{
+page {
   width: 100%;
   overflow-x: hidden;
 }
@@ -122,7 +143,8 @@ page{
   position: relative;
 }
 
-.footer:after, .footer:before {
+.footer:after,
+.footer:before {
   background: #aaa;
   content: "";
   height: 1px;

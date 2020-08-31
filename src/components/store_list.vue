@@ -9,7 +9,7 @@
         <view>
           <text class="score">{{storeInfo.star}}</text>
           <text class="saleMonth">月售{{storeInfo.monthSell}}</text>
-          <text class="delTime">30分钟</text>
+          <text class="delTime">{{((storeInfo.deliveryTime)/60).toFixed(0)}}分钟</text>
         </view>
         <view class="priceInfo">
           <text class="minDelPrice">起送￥{{storeInfo.startTakeOut}}</text>
@@ -28,14 +28,16 @@ export default {
       value: null,
     },
   },
-  methods:{
-      selectStore(){
-          this.$emit('select',{
-              detail:this.storeInfo.id,
-              pic:this.storeInfo.pic,
-          })
-      }
-  }
+  mounted(){
+  },
+  methods: {
+    selectStore() {
+      this.$emit("select", {
+        detail: this.storeInfo.id,
+        pic: this.storeInfo.pic,
+      });
+    },
+  },
 };
 </script>
 <style scoped>

@@ -9,7 +9,7 @@
         <view class="head-detail">
           <view class="info">
             <text>起送￥{{shopInfo.startTakeOut}}</text>
-            <text>30分钟</text>
+            <text>{{deliveryTime}}分钟</text>
             <text>3.2km</text>
           </view>
           <view class="publicMsg">{{shopInfo.announcement}}</view>
@@ -32,7 +32,7 @@
             <view class="title">配送</view>
             <view class="del-info">
               <text>起送￥2</text>
-              <text>30分钟</text>
+              <text>{{deliveryTime}}分钟</text>
               <text>2.5km</text>
             </view>
             <view class="time-info">配送时间：5:00-6:00</view>
@@ -119,6 +119,7 @@ export default {
       },
       showModal:false,
       tabIndex:0,
+      deliveryTime:0
     };
   },
   onLoad(option) {
@@ -127,6 +128,7 @@ export default {
     this.shopId = option.id;
     // this.picPath = option.pic;
     this.getShopInfo();
+    this.getTimeArr();
   },
   components: {
     goods,
@@ -158,6 +160,16 @@ export default {
 
     closeModal(e) {
       this.showModal = false
+    },
+    getTimeArr(){
+      var timeArr = uni.getStorageSync("timeArr");
+      console.log("getTimeArr的数据",timeArr);
+      console.log("timeArr的长度",timeArr.length);
+      for(var i = 0;i < timeArr.length;i++){
+        if(timeArr[i].key == this.shopId){
+          this.deliveryTime = (timeArr[i].value/60).toFixed(0);
+        }
+      }
     }
   },
 };

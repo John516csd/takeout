@@ -65,10 +65,16 @@ export default {
       gender:"",
       phoneno:"",
       address_d:"",
+      //是否来自submit的
+      fromSubmit:false,
+      shopId:0
     };
   },
   onLoad(options) {
     console.log("options", options);
+    this.fromSubmit = options.fromSubmit == null ? false : true;
+    this.shopId = options.shopId = options.shopId;
+    console.log("fromSubmit",this.fromSubmit);
     this.uuid = options.uuid;
     this.request({
       url: "https://hzycode.cn/WechatTakeOut/address/getAddressByUuid",
@@ -132,9 +138,15 @@ export default {
       }).then((res) => {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
-        uni.reLaunch({
-          url: "/pages/myaddress/address",
-        });
+        if(this.fromSubmit){
+          uni.navigateTo({
+            url:"/pages/submit/submit?shopId="+this.shopId,
+          })
+        }else{
+          uni.reLaunch({
+            url: "/pages/myaddress/address",
+          });
+        }
       });
     },
     //更新地址

@@ -257,3 +257,7 @@ page {
     display: flex;
     align-items: center;
 }
+
+.space {
+    height: 150rpx;
+}

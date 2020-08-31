@@ -72,20 +72,21 @@
               </view>
             </view>
           </view>
+          <view class="space"></view>
         </scroll-view>
       </view>
     </view>
     <view class="cart">
       <view class="cart-container" @tap="listCart">
-          <view :class="'cart-img '+'has-food'">
-            <image src="./static/gouwuche.png"></image>
-          </view>
-          <view class="del-price-money">
-            <view class="money">￥{{totalMoney/100}}</view>
-            <view
-              class="del-price"
-            >{{shopInfo.startTakeOut>0?'另需配送费'+shopInfo.startTakeOut+'元':'免配送费'}}</view>
-          </view>
+        <view :class="'cart-img '+'has-food'">
+          <image src="./static/gouwuche.png"></image>
+        </view>
+        <view class="del-price-money">
+          <view class="money">￥{{totalMoney/100}}</view>
+          <view
+            class="del-price"
+          >{{shopInfo.startTakeOut>0?'另需配送费'+shopInfo.startTakeOut+'元':'免配送费'}}</view>
+        </view>
         <view
           :class="'start-del ' + ((totalMoney>=shopInfo.startTakeOut&&cart.length>0)?'has-food':'')"
           @tap="submitMenu"
@@ -142,19 +143,24 @@ export default {
       showCart: false,
       cart: [],
       totalMoney: 0,
-      submitShowcart:false,
+      submitShowcart: false,
     };
   },
   mounted() {},
   onReady() {
+    this.changeShopId();
     this.getShopInfo();
     this.getFaimlies();
     this.getFoodsList();
     setTimeout(() => {
       this.calculateHeight();
-    }, 1000);
+    }, 500);
   },
   methods: {
+    changeShopId(){
+      this.shopId = this.storeId;
+      console.log("shopId",this.shopId);
+    },
     getShopInfo() {
       this.request({
         url: getApp().globalData.serverUrl + "/shop/getShop",
@@ -292,7 +298,7 @@ export default {
       console.log("totalMoney", this.totalMoney);
     },
     listCart() {
-      console.log("listCart",this.showCart);
+      console.log("listCart", this.showCart);
       if (this.cart.length > 0 && this.submitShowcart == false) {
         this.showCart = !this.showCart;
       }
@@ -346,12 +352,12 @@ export default {
             if (this.list[i].items[j].uuid == uuid) {
               this.list[i].items[j].count -= 1;
               this.totalMoney -= this.cart[index].money;
-              if(this.list[i].items[j].count < 1){
-                this.cart.splice(index,1);
-              }else{
+              if (this.list[i].items[j].count < 1) {
+                this.cart.splice(index, 1);
+              } else {
                 this.cart[index].count -= 1;
               }
-              if(this.cart.length == 0){
+              if (this.cart.length == 0) {
                 this.showCart = false;
               }
               console.log("cartReduce", this.list, this.cart);
@@ -360,34 +366,33 @@ export default {
         }
       }
     },
-    submitMenu(){
+    submitMenu() {
       this.submitShowcart = true;
-      console.log("submit",this.showCart);
-      uni.setStorageSync("cart",this.cart);
+      console.log("submit", this.showCart);
+      uni.setStorageSync("cart", this.cart);
       var dataArr = [];
-      for(var i = 0;i < this.cart.length;i++){
+      for (var i = 0; i < this.cart.length; i++) {
         var uuid = this.cart[i].uuid;
         var number = this.cart[i].count;
-        dataArr.push({"uuid":uuid,"number":number})
+        dataArr.push({ uuid: uuid, number: number });
       }
       var res = {
-        menuList:dataArr, 
-      }
+        menuList: dataArr,
+      };
       this.request({
-        method:"POST",
-        url:getApp().globalData.serverUrl+'/toPay/prePay',
-        data:JSON.stringify(res),
-      })
-      .then((res)=>{
-        console.log("submitMenu",res);
-        if(res.data == this.totalMoney){
+        method: "POST",
+        url: getApp().globalData.serverUrl + "/toPay/prePay",
+        data: JSON.stringify(res),
+      }).then((res) => {
+        console.log("submitMenu", res);
+        if (res.data == this.totalMoney) {
           uni.navigateTo({
-            url:"/pages/submit/submit"
+            url: "/pages/submit/submit?shopId="+this.shopId,
           }),
-          this.submitShowcart = false;
+            (this.submitShowcart = false);
         }
-      })
-    }
+      });
+    },
   },
 };
 </script>

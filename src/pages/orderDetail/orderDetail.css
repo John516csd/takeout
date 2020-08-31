@@ -1,0 +1,147 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    background-color: rgb(243, 243, 243);
+    height: 100vh;
+}
+
+.orderState {
+    position: relative;
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10rpx;
+    margin-top: 20rpx;
+    padding: 10rpx 0;
+    height: 200rpx;
+    margin-bottom: 30rpx;
+}
+
+.orderState:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: -5px;
+    width: 10px;
+    height: 100%;
+    background: radial-gradient(circle, #fff, #fff 10rpx, transparent 10rpx);
+    background-size: 20rpx 30rpx;
+}
+
+.status {
+    font-weight: 550;
+}
+
+.status,
+.notice {
+    text-align: center;
+}
+
+.stateDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 200rpx;
+}
+
+.notice {
+    font-size: 30rpx;
+    color: gray;
+}
+
+.commitOrder {
+    background-color: rgb(246, 210, 114);
+    width: 200rpx;
+    height: 75rpx;
+    font-size: 35rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20rpx;
+}
+
+.goodPic image {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 10rpx;
+}
+
+.orderDetail {
+    display: flex;
+    background-color: #fff;
+    width: 90%;
+    flex-direction: column;
+    border-radius: 10rpx;
+    padding: 20rpx;
+}
+
+.shopName {
+    height: 80rpx;
+    font-size: 35rpx;
+}
+
+.goodDetail {
+    display: flex;
+}
+
+.goodPic {
+    flex: 2;
+}
+
+.goodName {
+    flex: 6;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 35rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.goodCount {
+    color: #ccc;
+}
+
+.goodPrice {
+    flex: 2;
+}
+
+.address,
+.orderInfo {
+    margin-top: 20rpx;
+    display: flex;
+    background-color: #fff;
+    width: 90%;
+    flex-direction: column;
+    border-radius: 10rpx;
+    padding: 20rpx;
+}
+
+.address,
+.orderInfo {
+    font-size: 30rpx;
+}
+
+.leftSpan {
+    color: #ccc;
+    width: 30%;
+}
+
+.rightSpan {
+    margin-left: 30rpx;
+    color: black;
+    width: 70%;
+}
+
+.detailAddress {
+    margin-left: 142rpx;
+}
+
+.address,
+.orderInfo {
+    line-height: 60rpx;
+}

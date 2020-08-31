@@ -1,0 +1,58 @@
+.goodMsg {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.white {
+    height: 200rpx;
+}
+
+.pay {
+    position: fixed;
+    bottom: 10rpx;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.price {
+    width: 400rpx;
+    height: 100rpx;
+    border-top-left-radius: 50rpx;
+    border-bottom-left-radius: 50rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #2f2f2f;
+}
+
+.totalMoney {
+    position: relative;
+    left: 25rpx;
+    font-size: 36rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    color: #fff;
+}
+
+.discount {
+    position: relative;
+    left: 30rpx;
+    font-size: 24rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+    color: #fff;
+}
+
+.payBtn {
+    width: 200rpx;
+    height: 100rpx;
+    border-top-right-radius: 50rpx;
+    border-bottom-right-radius: 50rpx;
+    background-color: #ffd161;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -58,13 +58,14 @@
             "style": {
                 "navigationBarTitleText": "提交订单"
             }
+        },
+        {
+            "path": "pages/orderDetail/orderDetail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
         }
     ],
-    "permission": {
-        "scope.userLocation": {
-            "desc": "你的位置信息将用于小程序位置接口的效果展示"
-        }
-    },
     "globalStyle": {
         "navigationBarTextStyle": "white",
         "navigationBarTitleText": "uni-app",
@@ -77,8 +78,11 @@
             "i-cell": "/static/iview/cell/index",
             "i-action-sheet": "/static/iview/action-sheet/index",
             "i-icon": "/static/iview/icon/index",
-            "i-swipeout": "/static/iview/swipeout/index"
-
+            "i-swipeout": "/static/iview/swipeout/index",
+            "i-button": "/static/iview/button/index",
+            "i-tabs": "/static/iview/tabs/index",
+            "i-tab": "/static/iview/tab/index",
+            "i-divider": "/static/iview/divider/index"
         }
     },
     "tabBar": {
@@ -96,7 +100,7 @@
                 "selectedIconPath": "./static/icons/购物车.png",
                 "iconPath": "./static/icons/cart_unchecked.png",
                 "pagePath": "pages/cart/cart",
-                "text": "购物车"
+                "text": "订单"
             },
             {
                 "selectedIconPath": "./static/icons/用户.png",

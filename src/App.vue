@@ -1,39 +1,41 @@
 <script>
 export default {
-  globalData:{
-    testUrl:"https://hzycode.utools.club/WechatTakeOut",
-    testUrl_p:"https://hzycode.utools.club/WechatTakeOut/pages/pics",
-    serverUrl:"https://hzycode.cn/WechatTakeOut",
-    serverUrl_p:"https://hzycode.cn/WechatTakeOut/pages/pics",
+  methods: {
+    async loginRequest() {
+      var [err, res] = await uni.request({
+        url: "https://hzycode.cn/WechatTakeOut/key/openId",
+        data: {
+          code: uni.getStorageSync("code"),
+        },
+      });
+      console.log("appres", res.data.openid);
+      uni.setStorageSync("openid", res.data.openid);
+      var [openidErr, openidRes] = await uni.request({
+        url: "https://hzycode.cn/WechatTakeOut/user/saveUser",
+        data: {
+          openId: uni.getStorageSync("openid"),
+        },
+      });
+      console.log(openidRes);
+      console.log("login_success");
+    },
+  },
+  globalData: {
+    testUrl: "https://hzycode.utools.club/WechatTakeOut",
+    testUrl_p: "https://hzycode.utools.club/WechatTakeOut/pages/pics",
+    serverUrl: "https://hzycode.cn/WechatTakeOut",
+    serverUrl_p: "https://hzycode.cn/WechatTakeOut/pages/pics",
   },
   onLaunch: function () {
     console.log("App Launch");
     //登录
+    var that = this;
     uni.login({
       //获取code
       success: function (res) {
         var code = res.code; //返回code
         uni.setStorageSync("code", code);
-        uni.request({
-          url: "https://hzycode.cn/WechatTakeOut/key/openId",
-          data: {
-            code: uni.getStorageSync("code"),
-          },
-          success: (res) => {
-            console.log("appres", res.data.openid);
-            uni.setStorageSync("openid", res.data.openid);
-            uni.request({
-              url: "https://hzycode.cn/WechatTakeOut/user/saveUser",
-              data: {
-                openId: uni.getStorageSync("openid"),
-              },
-              success: (res) => {
-                console.log(res);
-                console.log("login_success");
-              },
-            });
-          },
-        });
+        that.loginRequest();
       },
     });
     //获取用户信息
@@ -43,7 +45,7 @@ export default {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           uni.getUserInfo({
             success: (res) => {
-              console.log("uni.getUserInfo")
+              console.log("uni.getUserInfo");
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo;
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
