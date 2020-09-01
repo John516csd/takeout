@@ -79,7 +79,7 @@
     <view class="cart">
       <view class="cart-container" @tap="listCart">
         <view :class="'cart-img '+'has-food'">
-          <image src="./static/gouwuche.png"></image>
+          <image src="https://hzycode.cn/WechatTakeOut/pages/pics/shopCar.png"></image>
         </view>
         <view class="del-price-money">
           <view class="money">￥{{totalMoney/100}}</view>
@@ -379,6 +379,10 @@ export default {
       var res = {
         menuList: dataArr,
       };
+      if(this.cart.length == 0){
+        this.submitShowcart = false;
+        return;
+      }
       this.request({
         method: "POST",
         url: getApp().globalData.serverUrl + "/toPay/prePay",
@@ -388,8 +392,8 @@ export default {
         if (res.data == this.totalMoney) {
           uni.navigateTo({
             url: "/pages/submit/submit?shopId="+this.shopId,
-          }),
-            (this.submitShowcart = false);
+          });
+          this.submitShowcart = false;
         }
       });
     },

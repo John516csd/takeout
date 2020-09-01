@@ -1,0 +1,14 @@
+.uni-margin-wrap {
+    width: 690rpx;
+    margin: 0 30rpx;
+  }
+  .swiper {
+    height: 300rpx;
+  }
+  .swiper-item {
+    display: block;
+    height: 400rpx;
+    line-height: 300rpx;
+    text-align: center;
+  }
+  

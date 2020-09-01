@@ -34,7 +34,7 @@
           ></i-card>
         </view>
         <i-cell title="打包费">
-          <view class="packagePay" slot="footer">￥2</view>
+          <view class="packagePay" slot="footer">￥0</view>
         </i-cell>
         <i-cell title="配送费">
           <view class="takeoutPay" slot="footer">￥{{shopInfo.delivery/100}}</view>

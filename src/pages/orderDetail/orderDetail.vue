@@ -8,19 +8,21 @@
       </view>
     </view>
     <view class="orderDetail">
-        <view class="shopName">至尊披萨(上社店)</view>
-        <view class="goodDetail">
-            <view class="goodPic">
-              <image src="https://www.hzycode.cn/WechatTakeOut/pages/pics/front.jpg"></image>
-            </view>
-            <view class="goodName">
-                <view class="goodTitle">波士顿大龙虾披萨</view>
-                <view class="goodCount">×2</view>
-            </view>
-            <view class="goodPrice">
-                <view class="totalMoney">￥12</view>
-            </view>
+      <i-cell :title="shopName" is-link :url="'/pages/storegoods/storegoods?id='+orderDetail.order.shopId">
+        <i-icon size="25" color="#80848f" type="shop_fill" slot="icon"/>
+      </i-cell>
+      <view class="goodDetail" v-for="(item,index) in orderDetail.order.menuList" :key="index">
+        <view class="goodPic">
+          <image :src="'https://www.hzycode.cn/WechatTakeOut/pages/pics/'+item.pic"></image>
         </view>
+        <view class="goodName">
+          <view class="goodTitle">{{item.title}}</view>
+          <view class="goodCount">×{{item.number}}</view>
+        </view>
+        <view class="goodPrice">
+          <view class="totalMoney">￥{{(item.number*item.money)/100}}</view>
+        </view>
+      </view>
     </view>
     <view class="address">
       <view class="time">
@@ -30,23 +32,28 @@
       <view>
         <span class="leftSpan">配送地址</span>
         <span class="rightSpan">
-          <span class="nick">黄先生17702040524</span>
-          <view class="detailAddress">广东技术师范大学学生宿舍7栋401</view>
+          <span class="nick">{{orderDetail.address.nick}}{{orderDetail.address.phone}}</span>
+          <view class="detailAddress">
+            {{orderDetail.address.province}}
+            {{orderDetail.address.city}}
+            {{orderDetail.address.district}}
+            {{orderDetail.address.address}}
+          </view>
         </span>
       </view>
     </view>
     <view class="orderInfo">
       <view class="orderId">
         <span class="leftSpan">订单号码</span>
-        <span class="rightSpan">123456789123456789123456789</span>
+        <span class="rightSpan">{{uuid}}</span>
       </view>
       <view class="orderTime">
         <span class="leftSpan">订单时间</span>
-        <span class="rightSpan">2020-08-31 11:19:29</span>
+        <span class="rightSpan">{{time}}</span>
       </view>
       <view class="orderNotice">
         <span class="leftSpan">订单备注</span>
-        <span class="rightSpan">可乐少冰</span>
+        <span class="rightSpan">无</span>
       </view>
     </view>
   </view>
@@ -56,12 +63,15 @@ export default {
   data() {
     return {
       uuid: "",
+      orderDetail: {},
+      time: "",
+      shopName: "",
     };
   },
   onLoad(options) {
     console.log("onLoad options", options);
     this.uuid = options.uuid;
-    // this.getOrderDetail();
+    this.getOrderDetail();
   },
   methods: {
     getOrderDetail() {
@@ -72,8 +82,36 @@ export default {
           openId: uni.getStorageSync("openid"),
         },
       }).then((res) => {
-        console.log("getOrderDetail", res);
+        this.orderDetail = res.data;
+        this.time = this.formatDate(this.orderDetail.order.addTime);
+        this.setShopName();
+        console.log("getOrderDetail", this.orderDetail);
       });
+    },
+    formatDate(addtime) {
+      var now = new Date(addtime);
+      var year = now.getFullYear(); //取得4位数的年份
+      var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+      var date = now.getDate(); //返回日期月份中的天数（1到31）
+      var hour = now.getHours(); //返回日期中的小时数（0到23）
+      var minute = now.getMinutes(); //返回日期中的分钟数（0到59）
+      var second = now.getSeconds(); //返回日期中的秒数（0到59）
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    },
+    setShopName() {
+      this.shopName = this.orderDetail.order.shopName;
     },
   },
 };

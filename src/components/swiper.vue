@@ -11,47 +11,28 @@
         :duration="duration"
       >
         <swiper-item>
-          <view class="swiper-item uni-bg-red">A</view>
+          <view class="swiper-item">
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic1.jpg"></image>
+          </view>
         </swiper-item>
         <swiper-item>
-          <view class="swiper-item uni-bg-green">B</view>
+          <view class="swiper-item">
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic2.jpg"></image>
+          </view>
         </swiper-item>
         <swiper-item>
-          <view class="swiper-item uni-bg-blue">C</view>
+          <view class="swiper-item">
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic3.jpg"></image>
+          </view>
         </swiper-item>
       </swiper>
     </view>
-
-    <!-- <view class="swiper-list">
-      <view class="uni-list-cell uni-list-cell-pd">
-        <view class="uni-list-cell-db">指示点</view>
-        <switch :checked="indicatorDots" @change="changeIndicatorDots" />
-      </view>
-      <view class="uni-list-cell uni-list-cell-pd">
-        <view class="uni-list-cell-db">自动播放</view>
-        <switch :checked="autoplay" @change="changeAutoplay" />
-      </view>
-    </view>
-
-    <view class="uni-padding-wrap">
-      <view class="uni-common-mt">
-        <text>幻灯片切换时长(ms)</text>
-        <text class="info">{{duration}}</text>
-      </view>
-      <slider @change="durationChange" :value="duration" min="500" max="2000" />
-      <view class="uni-common-mt">
-        <text>自动播放间隔时长(ms)</text>
-        <text class="info">{{interval}}</text>
-      </view>
-      <slider @change="intervalChange" :value="interval" min="2000" max="10000" /> -->
-    <!-- </view> -->
   </view>
 </template>
 <script>
 export default {
   data() {
     return {
-      background: ["color1", "color2", "color3"],
       indicatorDots: true,
       autoplay: true,
       interval: 2000,
@@ -76,37 +57,5 @@ export default {
 </script>
 
 <style>
-.uni-margin-wrap {
-  width: 690rpx;
-  margin: 0 30rpx;
-}
-.swiper {
-  height: 250rpx;
-}
-.swiper-item {
-  display: block;
-  height: 300rpx;
-  line-height: 300rpx;
-  text-align: center;
-}
-
-.swiper-list {
-  margin-top: 40rpx;
-  margin-bottom: 0;
-}
-
-.uni-common-mt {
-  margin-top: 60rpx;
-  position: relative;
-}
-
-.info {
-  position: absolute;
-  right: 20rpx;
-}
-
-.uni-padding-wrap {
-  width: 550rpx;
-  padding: 0 100rpx;
-}
+@import "./style/swiper.css";
 </style>

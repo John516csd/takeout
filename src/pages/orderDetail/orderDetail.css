@@ -85,6 +85,7 @@
 
 .goodDetail {
     display: flex;
+    margin: 10rpx 0;
 }
 
 .goodPic {
@@ -107,6 +108,8 @@
 }
 
 .goodPrice {
+    font-size: 35rpx;
+    color: tomato;
     flex: 2;
 }
 
