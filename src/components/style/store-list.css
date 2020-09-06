@@ -54,7 +54,7 @@
 
 .info .priceInfo text {
     padding: 0 14rpx;
-    border-right: 2px solid #eee;
+    border-right: 4rpx solid #eee;
 }
 
 .info .priceInfo text:last-child {

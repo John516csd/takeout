@@ -9,7 +9,7 @@
 
 .orderState {
     position: relative;
-    width: 90%;
+    width: 95%;
     background-color: rgb(255, 255, 255);
     border-radius: 10rpx;
     margin-top: 20rpx;
@@ -17,7 +17,7 @@
     height: 200rpx;
     margin-bottom: 30rpx;
 }
-
+/* 
 .orderState:after {
     content: '';
     position: absolute;
@@ -28,7 +28,7 @@
     height: 100%;
     background: radial-gradient(circle, #fff, #fff 10rpx, transparent 10rpx);
     background-size: 20rpx 30rpx;
-}
+} */
 
 .status {
     font-weight: 550;
@@ -85,11 +85,12 @@
 
 .goodDetail {
     display: flex;
-    margin: 10rpx 0;
+    flex-wrap: wrap;
 }
 
 .goodPic {
     flex: 2;
+    border-radius: 10rpx;
 }
 
 .goodName {
@@ -147,4 +148,9 @@
 .address,
 .orderInfo {
     line-height: 60rpx;
+}
+.space{
+    width: 95%;
+    height: 10rpx;
+    /* height: 20rpx; */
 }

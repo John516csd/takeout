@@ -1,0 +1,41 @@
+.container{
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+.uni-padding-wrap{
+    width: 95%;
+}
+.got_location{
+    /* font-size: 30rpx; */
+    color: #ccc;
+}
+.uni-form-item {
+    height: 100rpx;
+    display: flex;
+    border-bottom-width: 4rpx;
+    border-bottom-style: solid;
+    border-bottom-color: #ccc;
+    margin: 10rpx 0;
+}
+.uni-btn-v{
+    bottom: 0rpx;
+}
+.title{
+    flex: 3;
+    display: flex;
+    align-items: center;
+}
+.inputSpace{
+    flex: 7;
+    display: flex;
+    align-items: center;
+}
+.uni-btn-v{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 170rpx;
+}

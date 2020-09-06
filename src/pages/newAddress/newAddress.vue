@@ -1,39 +1,57 @@
 <template>
   <view class="container">
-    <button class="get_location" @click="handlegetLocation" type="primary">选择位置</button>
-    <view class="got_location">{{address==null?"":address}}</view>
-    <page-head title="form"></page-head>
+    <!-- <page-head title="form"></page-head> -->
     <view class="uni-padding-wrap uni-common-mt">
+      <view class="uni-form-item" @click="handlegetLocation">
+        <view class="title">收货地址</view>
+        <view class="inputSpace">
+          <view class="got_location">{{address==null?"请选择你的收货地址":address}}</view>
+        </view>
+      </view>
       <form @submit="formSubmit" @reset="formReset">
         <view class="uni-form-item uni-column">
           <view class="title">收货人姓名</view>
-          <input class="uni-input" name="nickname" placeholder="请输入姓名" v-model="nickname"/>
+          <view class="inputSpace">
+            <input class="uni-input" name="nickname" placeholder="请输入姓名" v-model="nickname" />
+          </view>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">性别</view>
-          <radio-group name="gender">
-            <label>
-              <radio value="男" :checked="gender=='男'"/>
-              <text>男</text>
-            </label>
-            <label>
-              <radio value="女" :checked="gender=='女'"/>
-              <text>女</text>
-            </label>
-          </radio-group>
+          <view class="inputSpace">
+            <radio-group name="gender">
+              <label>
+                <radio value="男" :checked="gender=='男'" />
+                <text>男</text>
+              </label>
+              <label>
+                <radio value="女" :checked="gender=='女'" />
+                <text>女</text>
+              </label>
+            </radio-group>
+          </view>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">电话号码</view>
-          <input class="uni-input" name="phoneno" placeholder="请输入电话号码" v-model="phoneno"/>
+          <view class="inputSpace">
+            <input class="uni-input" name="phoneno" placeholder="请输入电话号码" v-model="phoneno" />
+          </view>
         </view>
         <view class="uni-form-item uni-column">
           <view class="title">详细地址</view>
-          <input class="uni-input" name="address_d" placeholder="详细地址，例1层101" maxlength="20" v-model="address_d"/>
+          <view class="inputSpace">
+            <input
+              class="uni-input"
+              name="address_d"
+              placeholder="详细地址，例1层101"
+              maxlength="20"
+              v-model="address_d"
+            />
+          </view>
         </view>
         <view class="uni-btn-v">
-          <button form-type="submit">保存地址</button>
-          <button type="default" form-type="reset" v-if="!uuid">重置信息</button>
-          <button type="default" form-type="delete" v-else @click="deleteAddress">删除地址</button>
+          <button class="mini-btn" plain="true" type="primary" size="mini" form-type="submit">保存地址</button>
+          <button class="mini-btn" plain="true" type="primary" size="mini" form-type="reset" v-if="!uuid">重置信息</button>
+          <button class="mini-btn" plain="true" type="primary" size="mini" form-type="delete" v-else @click="deleteAddress">删除地址</button>
         </view>
       </form>
     </view>
@@ -57,24 +75,24 @@ export default {
       cityName: "",
       countyName: "",
       village: "",
-      latitude:"",
-      longitude:"",
+      latitude: "",
+      longitude: "",
       //编辑拿到的数据
-      uuid:"",
-      nickname:"",
-      gender:"",
-      phoneno:"",
-      address_d:"",
+      uuid: "",
+      nickname: "",
+      gender: "",
+      phoneno: "",
+      address_d: "",
       //是否来自submit的
-      fromSubmit:false,
-      shopId:0
+      fromSubmit: false,
+      shopId: 0,
     };
   },
   onLoad(options) {
     console.log("options", options);
     this.fromSubmit = options.fromSubmit == null ? false : true;
     this.shopId = options.shopId = options.shopId;
-    console.log("fromSubmit",this.fromSubmit);
+    console.log("fromSubmit", this.fromSubmit);
     this.uuid = options.uuid;
     this.request({
       url: "https://hzycode.cn/WechatTakeOut/address/getAddressByUuid",
@@ -82,8 +100,8 @@ export default {
         uuid: this.uuid,
       },
     }).then((res) => {
-      console.log("addAddress",res.data);
-      this.address = res.data.province+res.data.city+res.data.district;
+      console.log("addAddress", res.data);
+      this.address = res.data.province + res.data.city + res.data.district;
       this.nickname = res.data.nick;
       this.phoneno = res.data.phone;
       this.gender = res.data.gender;
@@ -91,6 +109,13 @@ export default {
     });
   },
   methods: {
+    test() {
+      uni.chooseAddress({
+        success(res) {
+          console.log("chooseAddress的数据", res);
+        },
+      });
+    },
     //选择并获取定位
     async handlegetLocation() {
       //获取权限状态
@@ -103,9 +128,9 @@ export default {
         const res2 = await getLocation();
         console.log("详细位置为：" + res2.address);
         this.address = res2.address;
-        this.latitude = (res2.latitude+'').substring(0,9);
-        this.longitude = (res2.longitude+'').substring(0,9);
-        console.log("经纬度",this.latitude,this.longitude);
+        this.latitude = (res2.latitude + "").substring(0, 9);
+        this.longitude = (res2.longitude + "").substring(0, 9);
+        console.log("经纬度", this.latitude, this.longitude);
         this.formatAddress();
       } catch (error) {
         console.log(error);
@@ -132,17 +157,17 @@ export default {
           city: that.cityName,
           district: that.countyName,
           address: that.village + that.formMsg.address_d,
-          lngAndLat:that.latitude+','+that.longitude,
+          lngAndLat: that.latitude + "," + that.longitude,
         },
         methods: "GET",
       }).then((res) => {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
-        if(this.fromSubmit){
+        if (this.fromSubmit) {
           uni.navigateTo({
-            url:"/pages/submit/submit?shopId="+this.shopId,
-          })
-        }else{
+            url: "/pages/submit/submit?shopId=" + this.shopId,
+          });
+        } else {
           uni.reLaunch({
             url: "/pages/myaddress/address",
           });
@@ -150,12 +175,12 @@ export default {
       });
     },
     //更新地址
-    updateAddress(){
+    updateAddress() {
       var that = this;
       this.request({
         url: "https://hzycode.cn/WechatTakeOut/address/updateAddress",
         data: {
-          uuid:that.uuid,
+          uuid: that.uuid,
           openId: uni.getStorageSync("openid"),
           nick: that.formMsg.nickname,
           gender: that.formMsg.gender,
@@ -164,7 +189,7 @@ export default {
           city: that.cityName,
           district: that.countyName,
           address: that.village + that.formMsg.address_d,
-          lngAndLat:that.latitude+','+that.longitude,
+          lngAndLat: that.latitude + "," + that.longitude,
         },
         methods: "GET",
       }).then((res) => {
@@ -218,9 +243,9 @@ export default {
         this.cityName = addressList[2];
         this.countyName = addressList[3];
         this.village = addressList[5];
-        if(this.uuid){
-          this.updateAddress()
-        }else{
+        if (this.uuid) {
+          this.updateAddress();
+        } else {
           this.sendAddress();
         }
       } else if (!this.address) {
@@ -233,27 +258,24 @@ export default {
     formReset: function (e) {
       console.log("清空数据");
     },
-    deleteAddress(){
+    deleteAddress() {
       this.request({
-        url:"https://hzycode.cn/WechatTakeOut/address/deleteAddress",
-        data:{
-          uuid:this.uuid,
-          openId:uni.getStorageSync("openid"),
-        }
-      })
-      .then((res)=>{
-        console.log("delete",res);
-        uni.setStorageSync("addressMessage",res.data);
+        url: "https://hzycode.cn/WechatTakeOut/address/deleteAddress",
+        data: {
+          uuid: this.uuid,
+          openId: uni.getStorageSync("openid"),
+        },
+      }).then((res) => {
+        console.log("delete", res);
+        uni.setStorageSync("addressMessage", res.data);
         uni.reLaunch({
-          url:"/pages/myaddress/address"
-        })
-      })
-    }
+          url: "/pages/myaddress/address",
+        });
+      });
+    },
   },
 };
 </script>
 <style>
-.uni-form-item .title {
-  padding: 20rpx 0;
-}
+@import "./newAddress.css";
 </style>

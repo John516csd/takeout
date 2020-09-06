@@ -9,7 +9,7 @@
     </view>
     <view class="orderDetail">
       <i-cell :title="shopName" is-link :url="'/pages/storegoods/storegoods?id='+orderDetail.order.shopId">
-        <i-icon size="25" color="#80848f" type="shop_fill" slot="icon"/>
+        <i-icon size="25" color="#ccc" type="shop_fill" slot="icon"/>
       </i-cell>
       <view class="goodDetail" v-for="(item,index) in orderDetail.order.menuList" :key="index">
         <view class="goodPic">
@@ -22,6 +22,7 @@
         <view class="goodPrice">
           <view class="totalMoney">￥{{(item.number*item.money)/100}}</view>
         </view>
+        <view class="space"></view>
       </view>
     </view>
     <view class="address">

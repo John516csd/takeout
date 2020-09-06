@@ -32,12 +32,12 @@ export default {
   data() {
     return {
       shopList: [],
+      originAddress:"",
     };
   },
   onShow() {},
   onLoad() {
     this.getShopList();
-    this.getShop();
   },
   methods: {
     toStoreGoods(id) {
@@ -54,39 +54,34 @@ export default {
         type: "wgs84",
         success(res) {
           console.log("当前经纬度：", res.latitude, res.longitude);
-          var address = res.longitude+','+res.latitude;
-          that.request({
-            url: getApp().globalData.serverUrl + "/shop/getAllShop",
-            data:{
-              origin:address,
-            }
-          }).then((res) => {
-            that.shopList = res.data;
-            that.setTimearr();
-            console.log("shopList", that.shopList);
-          });
+          var address = res.longitude + "," + res.latitude;
+          that.originAddress = address;
+          console.log("originAddress",that.originAddress)
         },
       });
-    },
-    setTimearr(){
-      console.log("setTimearr",this.shopList);
-      var timeArr = [];
-      for(var i = 0;i < this.shopList.length;i++){
-        timeArr.push({"key":this.shopList[i].id,"value":this.shopList[i].deliveryTime});
-        console.log("setTimearr的deliveryTime",this.shopList[i].deliveryTime);
-      }
-      console.log("timeArr",timeArr);
-      uni.setStorageSync("timeArr",timeArr);
-    },
-    getShop() {
       this.request({
-        url: getApp().globalData.serverUrl + "/shop/getShop",
+        url: getApp().globalData.serverUrl + "/shop/getAllShop",
         data: {
-          shopId: 1,
+          origin: this.originAddress,
         },
       }).then((res) => {
-        console.log("getShop", res);
+        this.shopList = res.data;
+        this.setTimearr();
+        console.log("shopList", this.shopList);
       });
+    },
+    setTimearr() {
+      console.log("setTimearr", this.shopList);
+      var timeArr = [];
+      for (var i = 0; i < this.shopList.length; i++) {
+        timeArr.push({
+          key: this.shopList[i].id,
+          value: this.shopList[i].deliveryTime,
+        });
+        console.log("setTimearr的deliveryTime", this.shopList[i].deliveryTime);
+      }
+      console.log("timeArr", timeArr);
+      uni.setStorageSync("timeArr", timeArr);
     },
   },
 };

@@ -15,7 +15,7 @@
         {{userinfo.nickName}}
       </view>
     </view>
-    <view class="operation">
+    <!-- <view class="operation">
       <view class="operationItem" @tap="handleChooseAddress">
         <image mode="aspectFill" class="item_image" src="../../static/icons/address.png"></image>
         <view class="item_text">我的地址</view>
@@ -23,24 +23,40 @@
       <view class="operationItem">
         <view class="item_text">帮助/反馈</view>
       </view>
-      <!-- <view class="operationItem">在线客服</view> -->
-    </view>
+      <view class="operationItem">在线客服</view>
+    </view>-->
+    <i-cell-group>
+      <i-cell title="我的地址" @click="handleChooseAddress" is-link>
+        <i-icon type="coordinates" size="20" slot="icon" />
+      </i-cell>
+      <i-cell title="帮助/反馈" @click="handleChooseAddress" is-link>
+        <i-icon type="feedback" size="20" slot="icon" />
+      </i-cell>
+      <i-cell title="注册成为骑手" is-link>
+        <i-icon type="group" size="20" slot="icon"/>
+      </i-cell>
+    </i-cell-group>
   </view>
 </template>
 <script>
-import { getSetting, openSetting, getUserInfo,chooseAddress } from "../../utils/asyncWx";
+import {
+  getSetting,
+  openSetting,
+  getUserInfo,
+  chooseAddress,
+} from "../../utils/asyncWx";
 export default {
   data() {
     return {
       //   isLogin:false,
       //   userMessage:[]
       userinfo: {},
-      address:{}
+      address: {},
     };
   },
   onShow() {
     // this.setUserMessage();
-    console.log("on Show")
+    console.log("on Show");
     const userinfo = uni.getStorageSync("userinfo");
     this.userinfo = userinfo;
     const address = uni.getStorageSync("address");
@@ -50,7 +66,6 @@ export default {
     //首先检验是否登录过
     //   this.check_isLogin();
     //   this.setUserMessage();
-    
   },
   methods: {
     async handlegetuserinfo() {
@@ -65,14 +80,13 @@ export default {
         uni.setStorageSync("userinfo", res2.userInfo);
         this.userinfo = res2.userInfo;
         this.request({
-          url:"https://hzycode.cn/WechatTakeOut/user/saveUser",
-          data:{
-            openId:uni.getStorageSync("openid"),
-          }
-        })
-        .then((res)=>{
+          url: "https://hzycode.cn/WechatTakeOut/user/saveUser",
+          data: {
+            openId: uni.getStorageSync("openid"),
+          },
+        }).then((res) => {
           console.log(res);
-        })
+        });
       } catch (error) {
         console.log(error);
       }
@@ -93,20 +107,19 @@ export default {
     //     console.log(error);
     //   }
     // },
-    handleChooseAddress(){
+    handleChooseAddress() {
       this.request({
-        url:"https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
-        data:{
-          openId:uni.getStorageSync("openid"),
-        }
-      })
-      .then((res)=>{
-        console.log("address",res);
-        uni.setStorageSync("addressMessage",res.data);
+        url: "https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
+        data: {
+          openId: uni.getStorageSync("openid"),
+        },
+      }).then((res) => {
+        console.log("address", res);
+        uni.setStorageSync("addressMessage", res.data);
         uni.navigateTo({
-          url:"/pages/myaddress/address",
+          url: "/pages/myaddress/address",
         });
-      })
+      });
     },
     //用户选择收货地址  end
   },
@@ -135,7 +148,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   padding-top: 20rpx;
-  justify-content:space-around;
+  justify-content: space-around;
 }
 .operationItem {
   display: flex;
@@ -146,7 +159,7 @@ export default {
   position: relative;
   justify-content: center;
 }
-.item_text{
+.item_text {
   position: absolute;
   width: 100%;
   height: 40rpx;
@@ -154,11 +167,11 @@ export default {
   font-size: 30rpx;
   font-weight: 300;
   display: flex;
-  align-items:flex-end;
-  justify-content: center; 
+  align-items: flex-end;
+  justify-content: center;
   top: 130rpx;
 }
-.item_image{
+.item_image {
   height: 100rpx;
   width: 100rpx;
   padding-top: 30rpx;

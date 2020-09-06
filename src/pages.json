@@ -82,7 +82,8 @@
             "i-button": "/static/iview/button/index",
             "i-tabs": "/static/iview/tabs/index",
             "i-tab": "/static/iview/tab/index",
-            "i-divider": "/static/iview/divider/index"
+            "i-divider": "/static/iview/divider/index",
+            "i-input": "/static/iview/input/index"
         }
     },
     "tabBar": {
@@ -97,8 +98,8 @@
                 "text": "首页"
             },
             {
-                "selectedIconPath": "./static/icons/购物车.png",
-                "iconPath": "./static/icons/cart_unchecked.png",
+                "selectedIconPath": "./static/icons/订单.png",
+                "iconPath": "./static/icons/订单(1).png",
                 "pagePath": "pages/cart/cart",
                 "text": "订单"
             },

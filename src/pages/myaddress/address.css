@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    flex-direction: column;
+  }
+  .address {
+    width: 90%;
+    height: 200rpx;
+    /* display: flex; */
+    border: 5rpx solid #ffffff;
+    /* border-style: outset; */
+    margin-top: 20rpx;
+    border-radius: 20rpx;
+    box-shadow: 20rpx 12rpx 10rpx 6rpx #3d3c3d4b;
+    position: relative;
+    background: #eecda3; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to left,
+      #ef629f,
+      #eecda3
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to left,
+      #ef629f,
+      #eecda3
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .address_message {
+    width: 90%;
+    font-size: 35rpx;
+    word-wrap: break-word;
+  }
+  .btn {
+    position: absolute;
+    right: 90rpx;
+    bottom: 0rpx;
+  }
+  .edit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+.newAddress{
+    height: 100rpx;
+    width: 100%;
+    position: fixed;
+    bottom: 0rpx;
+    display: flex;
+    border-top: 4rpx solid #eee;
+    justify-content: center;
+    align-items: center;
+    color: #030303;
+}
