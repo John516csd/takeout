@@ -83,7 +83,8 @@
             "i-tabs": "/static/iview/tabs/index",
             "i-tab": "/static/iview/tab/index",
             "i-divider": "/static/iview/divider/index",
-            "i-input": "/static/iview/input/index"
+            "i-input": "/static/iview/input/index",
+            "i-rate": "/static/iview/rate/index"
         }
     },
     "tabBar": {

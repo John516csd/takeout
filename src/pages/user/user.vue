@@ -29,7 +29,7 @@
       <i-cell title="我的地址" @click="handleChooseAddress" is-link>
         <i-icon type="coordinates" size="20" slot="icon" />
       </i-cell>
-      <i-cell title="帮助/反馈" @click="handleChooseAddress" is-link>
+      <i-cell title="帮助/反馈" is-link>
         <i-icon type="feedback" size="20" slot="icon" />
       </i-cell>
       <i-cell title="注册成为骑手" is-link>

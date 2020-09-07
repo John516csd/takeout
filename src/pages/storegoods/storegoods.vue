@@ -166,8 +166,8 @@ export default {
       console.log("getTimeArr的数据",timeArr);
       console.log("timeArr的长度",timeArr.length);
       for(var i = 0;i < timeArr.length;i++){
-        if(timeArr[i].key == this.shopId){
-          this.deliveryTime = (timeArr[i].value/60).toFixed(0);
+        if(timeArr[i].shopId == this.shopId){
+          this.deliveryTime = timeArr[i].time;
         }
       }
     }
