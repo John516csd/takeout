@@ -13,16 +13,20 @@
     </view>-->
     <i-cell-group>
       <i-cell
-        v-for="(item1) in addressMessage"
+        v-for="item1 in addressMessage"
         :key="item1"
         :title="item1.address"
-        :label="item1.nick+(item1.gender=='男'?'  先生':'  女士')"
+        :label="item1.nick + (item1.gender == '男' ? '  先生' : '  女士')"
       >
         <view class="editor" slot="footer" @click="editAddress(item1.uuid)">
           <i-icon type="editor" size="20" />
         </view>
         <view class="setDefault" @click="setdefault(item1.uuid)" slot="icon">
-          <i-icon :color="item1.tag==1?'#ffe600':'#ccc'" :type="item1.tag==1?'collection_fill':'collection'" size="20" />
+          <i-icon
+            :color="item1.tag == 1 ? '#ffe600' : '#ccc'"
+            :type="item1.tag == 1 ? 'collection_fill' : 'collection'"
+            size="20"
+          />
         </view>
       </i-cell>
     </i-cell-group>
@@ -41,7 +45,7 @@ export default {
   onLoad() {
     //刷新addressMessage
     this.request({
-      url: "https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
+      url: getApp().globalData.serverUrl + "/address/getAddsByOpenId",
       data: {
         openId: uni.getStorageSync("openid"),
       },
@@ -54,13 +58,14 @@ export default {
     setdefault(uuid) {
       console.log(uuid);
       this.request({
-        url: "https://hzycode.cn/WechatTakeOut/address/setFirst",
+        url: getApp().globalData.serverUrl + "/address/setFirst",
+        method: "POST",
         data: {
           uuid: uuid,
           openId: uni.getStorageSync("openid"),
         },
       }).then((res) => {
-        console.log(res);
+        console.log("setdefault的地址",res);
         this.addressMessage = res.data;
         uni.redirectTo("/pages/myaddress/address");
       });

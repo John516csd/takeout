@@ -109,7 +109,7 @@ export default {
     // },
     handleChooseAddress() {
       this.request({
-        url: "https://hzycode.cn/WechatTakeOut/address/getAddsByOpenId",
+        url: getApp().globalData.serverUrl+"/address/getAddsByOpenId",
         data: {
           openId: uni.getStorageSync("openid"),
         },

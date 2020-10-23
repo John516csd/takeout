@@ -12,17 +12,22 @@
       >
         <swiper-item>
           <view class="swiper-item">
-            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic1.jpg"></image>
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pics/pics/fontPic1.jpg"></image>
           </view>
         </swiper-item>
         <swiper-item>
           <view class="swiper-item">
-            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic2.jpg"></image>
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pics/pics/fontPic2.jpg"></image>
           </view>
         </swiper-item>
         <swiper-item>
           <view class="swiper-item">
-            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pages/pics/fontPic3.jpg"></image>
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pics/pics/fontPic3.jpg"></image>
+          </view>
+        </swiper-item>
+        <swiper-item>
+          <view class="swiper-item">
+            <image mode="widthFix"  src="https://hzycode.cn/WechatTakeOut/pics/pics/fontPic4.jpg"></image>
           </view>
         </swiper-item>
       </swiper>

@@ -10,26 +10,30 @@ export default {
       });
       console.log("appres", res.data.openid);
       uni.setStorageSync("openid", res.data.openid);
+      console.log("res.data.openid",res.data.openid)
+      console.log("我的打印了")
       var [openidErr, openidRes] = await uni.request({
         url: "https://hzycode.cn/WechatTakeOut/user/saveUser",
         data: {
           openId: uni.getStorageSync("openid"),
         },
+        method:"POST"
       });
-      console.log(openidRes);
+      console.log("openidRes",openidRes);
       console.log("login_success");
     },
   },
   globalData: {
     testUrl: "https://hzycode.utools.club/WechatTakeOut",
-    testUrl_p: "https://hzycode.utools.club/WechatTakeOut/pages/pics",
-    serverUrl: "https://hzycode.cn/WechatTakeOut",
-    serverUrl_p: "https://hzycode.cn/WechatTakeOut/pages/pics",
+    testUrl_p: "https://hzycode.utools.club/WechatTakeOut/pics",
+    serverUrl: "https://hzycode.cn/WechatTakeOut/mini",
+    userAvatar:"https://hzycode.cn/WechatTakeOut/pics/pics/uploads/",
+    serverUrl_p: "https://hzycode.cn/WechatTakeOut/pics/pics",
   },
   onLaunch: function () {
     console.log("App Launch");
     //登录
-    var that = this;
+    var that = this; 
     uni.login({
       //获取code
       success: function (res) {

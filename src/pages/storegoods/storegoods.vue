@@ -141,6 +141,7 @@ export default {
       this.request({
         url:getApp().globalData.serverUrl+"/shop/getShop",
         data:{
+          openId:uni.getStorageSync("openid"),
           shopId:this.shopId,
         }
       })

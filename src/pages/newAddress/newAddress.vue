@@ -95,8 +95,9 @@ export default {
     console.log("fromSubmit", this.fromSubmit);
     this.uuid = options.uuid;
     this.request({
-      url: "https://hzycode.cn/WechatTakeOut/address/getAddressByUuid",
+      url: getApp().globalData.serverUrl + "/address/getAddressByUuid",
       data: {
+        openId:uni.getStorageSync("openid"),
         uuid: this.uuid,
       },
     }).then((res) => {
@@ -147,7 +148,7 @@ export default {
     sendAddress() {
       var that = this;
       this.request({
-        url: "https://hzycode.cn/WechatTakeOut/address/addAddress",
+        url: getApp().globalData.serverUrl + "/address/addAddress",
         data: {
           openId: uni.getStorageSync("openid"),
           nick: that.formMsg.nickname,
@@ -159,7 +160,7 @@ export default {
           address: that.village + that.formMsg.address_d,
           lngAndLat: that.latitude + "," + that.longitude,
         },
-        methods: "GET",
+        method: "POST",
       }).then((res) => {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
@@ -178,7 +179,7 @@ export default {
     updateAddress() {
       var that = this;
       this.request({
-        url: "https://hzycode.cn/WechatTakeOut/address/updateAddress",
+        url: getApp().globalData.serverUrl + "/address/updateAddress",
         data: {
           uuid: that.uuid,
           openId: uni.getStorageSync("openid"),
@@ -191,7 +192,7 @@ export default {
           address: that.village + that.formMsg.address_d,
           lngAndLat: that.latitude + "," + that.longitude,
         },
-        methods: "GET",
+        method: "POST",
       }).then((res) => {
         console.log(res);
         uni.setStorageSync("addressMessage", res.data);
@@ -260,7 +261,8 @@ export default {
     },
     deleteAddress() {
       this.request({
-        url: "https://hzycode.cn/WechatTakeOut/address/deleteAddress",
+        url: getApp().globalData.serverUrl + "/address/deleteAddress",
+        method: "POST",
         data: {
           uuid: this.uuid,
           openId: uni.getStorageSync("openid"),

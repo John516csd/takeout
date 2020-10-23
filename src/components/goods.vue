@@ -79,7 +79,7 @@
     <view class="cart">
       <view class="cart-container" @tap="listCart">
         <view :class="'cart-img '+'has-food'">
-          <image src="https://hzycode.cn/WechatTakeOut/pages/pics/shopCar.png"></image>
+          <image src="https://hzycode.cn/WechatTakeOut/pics/pics/shopCar.png"></image>
         </view>
         <view class="del-price-money">
           <view class="money">￥{{totalMoney/100}}</view>
@@ -136,7 +136,7 @@ export default {
       activeIndex: 0,
       viewToLeft: "",
       viewTo: "right0",
-      picBase: getApp().globalData.serverUrl_p + "/",
+      picBase: getApp().globalData.userAvatar + "/",
       heightArr: [],
       default_img: "../../static/store.png",
       count: 0,
@@ -165,6 +165,7 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/shop/getShop",
         data: {
+          openId:uni.getStorageSync("openid"),
           shopId: this.storeId,
         },
       }).then((res) => {
@@ -176,6 +177,7 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/family/getFamilies",
         data: {
+          openId:uni.getStorageSync("openid"),
           shopId: this.storeId,
         },
       }).then((res) => {
@@ -203,6 +205,7 @@ export default {
       this.request({
         url: getApp().globalData.serverUrl + "/menu/getMenusByShopId",
         data: {
+          openId:uni.getStorageSync("openid"),
           shopId: this.storeId,
         },
       }).then((res) => {
@@ -385,7 +388,7 @@ export default {
       }
       this.request({
         method: "POST",
-        url: getApp().globalData.serverUrl + "/toPay/prePay",
+        url: "https://hzycode.cn/WechatTakeOut/toPay/prePay",
         data: JSON.stringify(res),
       }).then((res) => {
         console.log("submitMenu", res);

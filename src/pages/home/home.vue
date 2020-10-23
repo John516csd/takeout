@@ -16,7 +16,7 @@
       <view class="store" v-for="storeInfo in shopList" :key="storeInfo.id">
         <view class="store-info" @click="toStoreGoods(storeInfo.id,storeInfo.pic)">
           <view class="store-img">
-            <image :src="'https://hzycode.cn/WechatTakeOut/pages/pics/'+storeInfo.pic"></image>
+            <image :src="userAvatar+storeInfo.pic"></image>
           </view>
           <view class="info">
             <view class="store-name">{{storeInfo.name}}</view>
@@ -55,6 +55,7 @@ export default {
       shopList: [],
       originAddress: "",
       timeArr: [],
+      userAvatar:getApp().globalData.userAvatar,
     };
   },
   onShow() {},
@@ -64,8 +65,8 @@ export default {
   methods: {
     toStoreGoods(id, pic) {
       console.log("id", id);
-      var newPic = "/" + pic;
-      uni.setStorageSync("pic", getApp().globalData.serverUrl_p + newPic);
+      var newPic = pic;
+      uni.setStorageSync("pic", getApp().globalData.userAvatar + newPic);
       uni.navigateTo({
         url: "/pages/storegoods/storegoods?id=" + id + "&pic=" + newPic,
       });
@@ -83,6 +84,9 @@ export default {
       // });
       this.request({
         url: getApp().globalData.serverUrl + "/shop/getAllShop",
+        data:{
+          openId:uni.getStorageSync("openid")
+        }
       }).then((res) => {
         this.shopList = res.data;
         // this.setTimearr();
@@ -102,6 +106,7 @@ export default {
             .request({
               url: getApp().globalData.serverUrl + "/path/getAllDeliveryTime",
               data: {
+                openId:uni.getStorageSync("openid"),
                 destination: address,
               },
             })

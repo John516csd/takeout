@@ -19,8 +19,9 @@ export default {
     console.log("options", options);
     this.uuid = options.uuid;
     this.request({
-      url: "https://hzycode.cn/WechatTakeOut/address/getAddressByUuid",
+      url: getApp().globalData.serverUrl + "/address/getAddressByUuid",
       data: {
+        openId:uni.getStorageSync("openid"),
         uuid: this.uuid,
       },
     }).then((res) => {
@@ -32,11 +33,12 @@ export default {
   methods:{
     deleteAddress(){
       this.request({
-        url:"https://hzycode.cn/WechatTakeOut/address/deleteAddress",
+        methods:"POST",
+        url:getApp().globalData.serverUrl + "/address/deleteAddress",
         data:{
           uuid:this.uuid,
           openId:uni.getStorageSync("openid"),
-        }
+        },
       })
       .then((res)=>{
         console.log("delete",res);

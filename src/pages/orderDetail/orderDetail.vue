@@ -8,19 +8,29 @@
       </view>
     </view>
     <view class="orderDetail">
-      <i-cell :title="shopName" is-link :url="'/pages/storegoods/storegoods?id='+orderDetail.order.shopId">
-        <i-icon size="25" color="#ccc" type="shop_fill" slot="icon"/>
+      <i-cell
+        :title="shopName"
+        is-link
+        :url="'/pics/storegoods/storegoods?id=' + orderDetail.order.shopId"
+      >
+        <i-icon size="25" color="#ccc" type="shop_fill" slot="icon" />
       </i-cell>
-      <view class="goodDetail" v-for="(item,index) in orderDetail.order.menuList" :key="index">
+      <view
+        class="goodDetail"
+        v-for="(item, index) in orderDetail.order.menuList"
+        :key="index"
+      >
         <view class="goodPic">
-          <image :src="'https://www.hzycode.cn/WechatTakeOut/pages/pics/'+item.pic"></image>
+          <image :src="userAvatar + item.pic"></image>
         </view>
         <view class="goodName">
-          <view class="goodTitle">{{item.title}}</view>
-          <view class="goodCount">×{{item.number}}</view>
+          <view class="goodTitle">{{ item.title }}</view>
+          <view class="goodCount">×{{ item.number }}</view>
         </view>
         <view class="goodPrice">
-          <view class="totalMoney">￥{{(item.number*item.money)/100}}</view>
+          <view class="totalMoney"
+            >￥{{ (item.number * item.money) / 100 }}</view
+          >
         </view>
         <view class="space"></view>
       </view>
@@ -33,12 +43,14 @@
       <view>
         <span class="leftSpan">配送地址</span>
         <span class="rightSpan">
-          <span class="nick">{{orderDetail.address.nick}}{{orderDetail.address.phone}}</span>
+          <span class="nick"
+            >{{ orderDetail.address.nick }}{{ orderDetail.address.phone }}</span
+          >
           <view class="detailAddress">
-            {{orderDetail.address.province}}
-            {{orderDetail.address.city}}
-            {{orderDetail.address.district}}
-            {{orderDetail.address.address}}
+            {{ orderDetail.address.province }}
+            {{ orderDetail.address.city }}
+            {{ orderDetail.address.district }}
+            {{ orderDetail.address.address }}
           </view>
         </span>
       </view>
@@ -46,11 +58,11 @@
     <view class="orderInfo">
       <view class="orderId">
         <span class="leftSpan">订单号码</span>
-        <span class="rightSpan">{{uuid}}</span>
+        <span class="rightSpan">{{ uuid }}</span>
       </view>
       <view class="orderTime">
         <span class="leftSpan">订单时间</span>
-        <span class="rightSpan">{{time}}</span>
+        <span class="rightSpan">{{ time }}</span>
       </view>
       <view class="orderNotice">
         <span class="leftSpan">订单备注</span>
@@ -67,6 +79,7 @@ export default {
       orderDetail: {},
       time: "",
       shopName: "",
+      userAvatar: getApp().globalData.userAvatar,
     };
   },
   onLoad(options) {

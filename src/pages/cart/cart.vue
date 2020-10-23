@@ -49,7 +49,7 @@ export default {
       btnnum: 0,
       orderList:[],
       stateArr:["待付款","已付款","配送中","已完成","已取消"],
-      picPath : getApp().globalData.serverUrl_p + '/'
+      picPath : getApp().globalData.userAvatar
     };
   },
   onLoad() {
